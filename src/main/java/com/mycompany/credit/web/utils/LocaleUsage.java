@@ -32,7 +32,7 @@ public class LocaleUsage {
        }
        if(locale==null){
            //default locale
-           locale=LOCALE_VAL_RU;
+           locale=LOCALE_VAL_EN;
        }
 
        return locale;

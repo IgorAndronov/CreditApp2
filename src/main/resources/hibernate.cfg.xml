@@ -57,7 +57,7 @@
         <mapping class="com.mycompany.credit.dao.entity.client.dictionary.VDicStreetType"/>
         <mapping class="com.mycompany.credit.dao.entity.client.dictionary.VDicUsersStatus"/>
         <mapping class="com.mycompany.credit.dao.entity.client.dictionary.VDicWwwType"/>
-        <mapping class="com.mycompany.credit.dao.entity.VContactsTechSpec"/>
+
 
 
     </session-factory>

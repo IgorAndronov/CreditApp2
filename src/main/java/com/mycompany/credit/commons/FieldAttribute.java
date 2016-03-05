@@ -13,23 +13,23 @@ public class FieldAttribute {
     public static final String RADIO_INPUT = "radio";
     public static final String LOV_INPUT = "lov";
     public static final String CHECKBOX_INPUT = "checkbox";
-    public static final String TABLE_INPUT = "table";
+    public static final String PAGE_INPUT = "page";
 
     private String fieldType;
     private String fieldValue;
     private String fieldCaptionName;
     private List<String> fieldValueList = new ArrayList<>();
-    private boolean mandatory;
-    private boolean visibility;
+    private Boolean mandatory;
+    private Boolean visibility;
     private int length;
     private String precision;
     private boolean startGroupFlag;
     private boolean endGroupFlag;
-    private List<Map<String, FieldAttribute>> embededTable;
+    private List<Map<String, FieldAttribute>> embededPage;
 
 
 
-    public FieldAttribute(String fieldType,String fieldValue, List<String> fieldValueList, boolean visibility, int length, String precision){
+    public FieldAttribute(String fieldType,String fieldValue, List<String> fieldValueList, Boolean visibility, int length, String precision){
         this.fieldType= fieldType;
         this.fieldValue = fieldValue;
         this.fieldValueList=fieldValueList;
@@ -62,19 +62,19 @@ public class FieldAttribute {
         return SIMPLE_INPUT;
     }
 
-    public boolean isMandatory() {
+    public Boolean isMandatory() {
         return mandatory;
     }
 
-    public void setMandatory(boolean mandatory) {
+    public void setMandatory(Boolean mandatory) {
         this.mandatory = mandatory;
     }
 
-    public boolean isVisibility() {
+    public Boolean isVisibility() {
         return visibility;
     }
 
-    public void setVisibility(boolean visibility) {
+    public void setVisibility(Boolean visibility) {
         this.visibility = visibility;
     }
 
@@ -126,11 +126,11 @@ public class FieldAttribute {
         this.fieldCaptionName = fieldCaptionName;
     }
 
-    public List<Map<String, FieldAttribute>> getEmbededTable() {
-        return embededTable;
+    public List<Map<String, FieldAttribute>> getEmbededPage() {
+        return embededPage;
     }
 
-    public void setEmbededTable(List<Map<String, FieldAttribute>> embededTable) {
-        this.embededTable = embededTable;
+    public void setEmbededPage(List<Map<String, FieldAttribute>> embededPage) {
+        this.embededPage = embededPage;
     }
 }

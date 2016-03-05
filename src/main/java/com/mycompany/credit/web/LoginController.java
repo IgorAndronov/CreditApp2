@@ -33,6 +33,7 @@ public class LoginController {
    private Integer userId;
    final static Logger logger = Logger.getLogger(LoginController.class);
    final static String ERROR_LOGIN_MSG_RU ="! Логин или пароль не верны.";
+   final static String ERROR_LOGIN_MSG_EN ="! Login or password is incorrect.";
 
     @Resource(name = "UserServiceImpl")
     UserService userService;

@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="./resources/css/jquery-ui-slider-pips.css">
 
     <link href="./resources/css/style.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="./resources/js/template.js"></script>
 </head>
 <body>
 <!-- header -->
@@ -129,7 +132,7 @@
 
 
 <!-- Footer -->
-<footer>
+<footer id="footer">
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-4">

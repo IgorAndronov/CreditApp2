@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface TechSpecService  {
 
-    public List<TechSpecDictionary> getTechSpecFieldsList(String Locale, int PageNumber, String techSpecName);
-    public List<KeyValueResult<String,String>> getDictionaryData(String DicNameView,String locale);
+    public List<TechSpecDictionary> getTechSpecFieldsList(String locale, int tabsheetNumber, String techSpecName);
+    public List<KeyValueResult<String,String>> getDictionaryData(String dicNameView,String locale);
 
 }

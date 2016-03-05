@@ -9,8 +9,8 @@ public class Constants {
     public static final String LOCALES_REL_PATH_UKR ="/WEB-INF/classes/locale/ukr/";
 
     public static final String LOCALE_VAL_EN ="ENG";
-    public static final String LOCALE_VAL_RU ="РУС";
-    public static final String LOCALE_VAL_UKR ="УКР";
+    public static final String LOCALE_VAL_RU ="RUS";
+    public static final String LOCALE_VAL_UKR ="UKR";
 
     public static final String CLIENT="client";
     public static final String MANAGER="manager";

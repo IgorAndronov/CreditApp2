@@ -36,19 +36,19 @@ public class TechSpecServiceImpl implements TechSpecService{
 
     @Transactional
     @Override
-    public List<TechSpecDictionary> getTechSpecFieldsList(String locale, int pageNumber, String techSpecName ) {
+    public List<TechSpecDictionary> getTechSpecFieldsList(String locale, int tabsheetNumber, String techSpecName ) {
         logger.debug("getting data ...");
 
         String q = "select random() Id, cf.* from " + techSpecName +" cf " +
                 "where cf.localisation=:locale " +
-                "and cf.page_number=:pageNumber " +
+                "and cf.tab_sheet_number=:tabsheetNumber " +
                 "and cf.visible='true'"+
                 "order by group_number, group_sorting";
         List<TechSpecDictionary> TechSpecDictionaryList = (List<TechSpecDictionary>) sessionFactory.getCurrentSession()
                 .createSQLQuery(q)
                 .addEntity(TechSpecDictionary.class)
                 .setParameter("locale", locale)
-                .setParameter("pageNumber", pageNumber)
+                .setParameter("tabsheetNumber", tabsheetNumber)
                 .list();
 
         for (TechSpecDictionary c: TechSpecDictionaryList) {
@@ -59,11 +59,11 @@ public class TechSpecServiceImpl implements TechSpecService{
     }
 
 
-    public List<KeyValueResult<String,String>> getDictionaryData(String DicNameView,String locale){
-        logger.debug("reading " + DicNameView + " locale is " + locale);
+    public List<KeyValueResult<String,String>> getDictionaryData(String dicNameView,String locale){
+        logger.debug("reading " + dicNameView + " locale is " + locale);
 
-        Class dictionary =(Class) clientDictionaries.get(DicNameView);
-        String q = "select value as key, name as value from "+"\"icredit\"."+DicNameView+
+        Class dictionary =(Class) clientDictionaries.get(dicNameView);
+        String q = "select value as key, name as value from "+"\"icredit\"."+dicNameView+
                 " where localisation=:locale";
 
         List<KeyValueResult<String,String>> dicDataList = (List<KeyValueResult<String,String>>) sessionFactory.getCurrentSession()

@@ -1,18 +1,18 @@
-<%@ attribute name="fieldsTable"  type="java.util.List" required="true" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="fieldsTableTag" %>
+<%@ attribute name="fieldsPage"  type="java.util.List" required="false" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="fieldsPageTag" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%--Dinamic data--%>
 <%--group of fields--%>
-<c:forEach var="groupItem" items="${fieldsTable}">
+<c:forEach var="groupItem" items="${fieldsPage}">
 
     <div class="panel panel-default" style="padding: 12pt; background-color: #e2e2e2">
             <%--fields inside group--%>
         <c:forEach var="keyValue" items="${groupItem.keySet()}">
-            <%--table element--%>
-            <c:if test="${groupItem.get(keyValue).getFieldType()==FieldAttribute.TABLE_INPUT}">
+            <%--page element--%>
+            <c:if test="${groupItem.get(keyValue).getFieldType()==FieldAttribute.PAGE_INPUT}">
                 <%--recursion call--%>
-                <fieldsTableTag:fieldsTable fieldsTable="${groupItem.get(keyValue).getEmbededTable()}"/>
+                <fieldsPageTag:fieldsPage fieldsPage="${groupItem.get(keyValue).getEmbededPage()}"/>
             </c:if>
             <%--ordinar input element--%>
             <c:if test="${groupItem.get(keyValue).getFieldType()==FieldAttribute.SIMPLE_INPUT}">

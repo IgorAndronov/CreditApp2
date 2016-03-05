@@ -1,4 +1,4 @@
-package com.mycompany.credit.dao;
+package com.mycompany.credit.dao.implementation;
 
 import com.mycompany.credit.dao.entity.DicStreetType;
 import com.mycompany.credit.dao.interfaces.DictionaryAddressService;

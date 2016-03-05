@@ -16,6 +16,7 @@ import static com.mycompany.credit.commons.Constants.LOCALE_VAL_EN;
 
 /**
  * Created by igor on 20.10.15.
+ * Extracts fields and its values from the corresponding techspec with depth of child pages limited to "recursionLimit var"
  */
 
 @Component(value = "FieldsTechSpec")
@@ -24,20 +25,20 @@ public class FieldsTechSpec {
     @Resource(name = "TechSpecServiceImpl")
     TechSpecService techSpecService;
 
-    public List<Map<String, FieldAttribute>> getFieldsEditMode(Integer clientId, String locale, int pageNumber, String techSpecName, int recursionStep){
+    public List<Map<String, FieldAttribute>> getFieldsEditMode(Integer clientId, String locale, int tabsheetNumber, String techSpecName, int recursionStep){
         if(recursionStep > recursionLimit){
             return null;
         }else{
             recursionStep++;
         }
-        //contains list of all elemnts with "table" view type
+        //contains list of all elements with "page" view type
         List<Map<String, FieldAttribute>> resultingFieldsPage =new ArrayList<>();
 
         //get specification data
-        List<TechSpecDictionary> TechSpecDictionaryList = techSpecService.getTechSpecFieldsList(locale, pageNumber, techSpecName);
+        List<TechSpecDictionary> TechSpecDictionaryList = techSpecService.getTechSpecFieldsList(locale, tabsheetNumber, techSpecName);
 
         //prepare result
-        int currentGroup =0;
+        int currentGroup = -1;
         Map<String,FieldAttribute> groupFields=null;
 
         for(TechSpecDictionary techSpecDictionary: TechSpecDictionaryList){
@@ -56,12 +57,12 @@ public class FieldsTechSpec {
             fieldAttribute.setMandatory(techSpecDictionary.getMandatory());
             fieldAttribute.setVisibility(techSpecDictionary.getVisible());
 
-            //Table view type:
-            if(techSpecDictionary.getFieldViewType().equalsIgnoreCase("table")){
-                List<Map<String, FieldAttribute>> embededTechSpec = getFieldsEditMode(clientId, locale, 1, techSpecDictionary.getTableSchema()+"."+techSpecDictionary.getDicNameR(), recursionStep);
-                fieldAttribute.setEmbededTable(embededTechSpec);
+            //Page view type:
+            if(techSpecDictionary.getFieldViewType().equalsIgnoreCase("page")){
+                List<Map<String, FieldAttribute>> embeddedTechSpec = getFieldsEditMode(clientId, locale, 1, techSpecDictionary.getTableSchema()+"."+techSpecDictionary.getDicNameR(), recursionStep);
+                fieldAttribute.setEmbededPage(embeddedTechSpec);
             }else {
-                //Non table view type: proceed for all non table types
+                //"Not page" view type: proceed for all "not page" types
                 if (techSpecDictionary.getFieldLength() != null) {
                     fieldAttribute.setLength(techSpecDictionary.getFieldLength());
                 }
@@ -79,7 +80,7 @@ public class FieldsTechSpec {
                     fieldAttribute.setFieldValueList(lov);
                 }
             }
-            groupFields.put(techSpecDictionary.getColumnName(), fieldAttribute);
+            groupFields.put(techSpecDictionary.getId(), fieldAttribute);
 
         }
 

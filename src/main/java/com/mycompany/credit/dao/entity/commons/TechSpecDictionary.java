@@ -30,11 +30,13 @@ public class TechSpecDictionary {
     private Boolean visible;
     // private String visible;
     private String readOnly;
-    private Integer pageNumber;
+    private Integer tabsheetNumber;
     private Integer sorting;
     private Integer groupNumber;
     private Integer groupSorting;
     private String fieldViewType;
+    private Boolean repeatable;
+
 
 
     @Id
@@ -142,7 +144,6 @@ public class TechSpecDictionary {
         return mandatory;
     }
 
-
     public void setMandatory(Boolean mandatory) {
         this.mandatory = mandatory;
     }
@@ -181,13 +182,13 @@ public class TechSpecDictionary {
     }
 
     @Basic
-    @Column(name = "page_number", nullable = true, insertable = false, updatable = false)
-    public Integer getPageNumber() {
-        return pageNumber;
+    @Column(name = "tab_sheet_number", nullable = true, insertable = false, updatable = false)
+    public Integer getTabsheetNumber() {
+        return tabsheetNumber;
     }
 
-    public void setPageNumber(Integer pageNumber) {
-        this.pageNumber = pageNumber;
+    public void setTabsheetNumber(Integer tabsheetNumber) {
+        this.tabsheetNumber = tabsheetNumber;
     }
 
     @Basic
@@ -230,4 +231,12 @@ public class TechSpecDictionary {
         this.fieldViewType = fieldViewType;
     }
 
+    @Column(name = "repeated", nullable = true)
+    public Boolean getRepeatable() {
+        return repeatable;
+    }
+
+    public void setRepeatable(Boolean repeatable) {
+        this.repeatable = repeatable;
+    }
 }
