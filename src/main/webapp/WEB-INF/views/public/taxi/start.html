@@ -95,8 +95,10 @@
 
             if (adr2.style.display=="none"){
                 adr2.style.display="block";
+                document.getElementById("BtnDelAddr").style.visibility="visible";
             }else if (adr3.style.display=="none"){
                 adr3.style.display="block";
+                document.getElementById("BtnDelAddr").style.visibility="visible";
             }
         }
 
@@ -109,6 +111,7 @@
                 adr3.style.display="none";
             }else if (adr2.style.display!="none"){
                 adr2.style.display="none";
+                document.getElementById("BtnDelAddr").style.visibility="hidden";
             }
         }
 
@@ -215,7 +218,7 @@
             </div>
             <div style="margin-left: 10pt; margin-bottom: 2pt">
                  <button type="button" class="btn btn-success" onclick="appendAddress()">+</button>
-                 <button type="button" class="btn btn-info" onclick="deleteAddress()">-</button>
+                 <button id = "BtnDelAddr" type="button" class="btn btn-info" style="visibility: hidden" onclick="deleteAddress()">-</button>
             </div>
         </div>
 
