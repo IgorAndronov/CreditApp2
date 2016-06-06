@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../resources/css/style-taxi.css" >
+    <link rel="stylesheet" href="../../../resources/css/wickedpicker.css" >
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/i18n/jquery-ui-i18n.min.js"></script>
+    <script type="text/javascript" src="../../../resources/js/wickedpicker.js"></script>
+    <script src="../../../resources/js/template.js"></script>
+
+<!--GoogleApi-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsmZOOng0fyFyVtw3zcfjPYeBNmzYh8NA&signed_in=true&libraries=places&callback=initAutocomplete"
+            async defer></script>
+
+    <script>
+
+        var tagId;
+        function  setTagId(val){
+           tagId=val;
+        }
+
+        function initAutocomplete() {
+            // Create the autocomplete object, restricting the search to geographical
+            // location types.
+            var autocompliteList  = document.getElementsByName("autocomplete");
+
+            for( var i= 0; i< autocompliteList.length; i++){
+               var autocomplete = new google.maps.places.Autocomplete(
+                        (document.getElementById(autocompliteList[i].getAttribute("id"))),
+                        {types: ['geocode']});
+                // When the user selects an address from the dropdown, populate the address
+                // fields in the form.
+                autocomplete.addListener('place_changed', fillInAddress);
+            }
+
+
+        }
+
+        var componentForm = {
+            street_number: 'short_name',
+            route: 'long_name',
+            locality: 'long_name',
+            administrative_area_level_1: 'short_name',
+            country: 'long_name',
+            postal_code: 'short_name'
+        };
+
+        function fillInAddress() {
+
+            // Get the place details from the autocomplete object.
+            var place = this.getPlace();
+            var placeId = place.place_id;
+
+
+
+            document.getElementById(tagId).value = '';
+            document.getElementById(tagId).style.display = "none";
+
+            var houseNo;
+            // Get each component of the address from the place details
+            // and fill the corresponding field on the form.
+            for (var i = 0; i < place.address_components.length; i++) {
+                var addressType = place.address_components[i].types[0];
+                if (componentForm[addressType]) {
+                    if(addressType=="street_number"){
+                        var houseNo = place.address_components[i][componentForm[addressType]];
+
+
+                    }
+
+                }
+            }
+            if (houseNo==undefined){
+                document.getElementById(tagId).style.display="block";
+            }
+
+        }
+
+    </script>
+
+    <script>
+        function appendAddress(){
+
+           var adr2 = document.getElementById("adr2");
+           var adr3 = document.getElementById("adr3");
+
+            if (adr2.style.display=="none"){
+                adr2.style.display="block";
+            }else if (adr3.style.display=="none"){
+                adr3.style.display="block";
+            }
+        }
+
+        function deleteAddress(){
+
+            var adr2 = document.getElementById("adr2");
+            var adr3 = document.getElementById("adr3");
+
+            if (adr3.style.display!="none"){
+                adr3.style.display="none";
+            }else if (adr2.style.display!="none"){
+                adr2.style.display="none";
+            }
+        }
+
+        function setDate(){
+            document.getElementById("setDate").style.display="block";
+        }
+        function setCurrent(){
+            document.getElementById("setDate").style.display="none";
+        }
+
+    </script>
+</head>
+<body>
+
+<!-- header -->
+<header>
+    <div class="container hidden-xs"> <!--hidden-xs allows hide the section when collapse-->
+        <div class="row" >
+            <!-- Logo -->
+            <div class="col-sm-6">
+                <img src="../../../resources/images/taxi/taxi3.png" style="float: left">
+                <div class="well logo " style="float: left;margin-left: 5pt">
+                    <a href="index.html">
+                        All <span>taxi</span>
+                    </a>
+                    <div>online service</div>
+                </div>
+            </div>
+            <div class="col-sm-2" >
+            </div>
+
+
+            <!-- Registration -->
+            <div class="col-sm-4" >
+                <div class="well">
+                    <div class="navbar-right btn-group">
+                        <a href="#" class="btn btn-success" type="button"><i class="glyphicon glyphicon-user"></i> Регистрация</a>
+                        <a href="#" class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-log-in"></i> Вход</a>
+                    </div>
+                </div>
+            </div>
+            <!-- End Registration -->
+        </div>
+    </div>
+</header>
+
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsedBar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!-- text logo on mobile view -->
+            <a class="navbar-brand visible-xs" href="index.html" style="font-weight: bold;color:#398439;font-size: 2em">All <label style="color:  #428bca">taxi</label></a>
+        </div>
+        <div class="navbar-collapse navbar-ex1-collapse collapse" id="collapsedBar">
+            <ul class="nav navbar-nav">
+                 <li><a href="#">О компании</a></li>
+                <li><a href="#">Как работает система</a></li>
+                <li><a href="#">Контакты</a></li>
+                <li>
+                    <div class="btn-group visible-xs btn-group-justified">
+                        <a href="#" class="btn btn-success"  type="button"><i class="glyphicon glyphicon-user"></i> Регистрация</a>
+                        <a href="login.html" class="btn btn-primary" style="background-color:#00ADEE " type="submit"><i class="glyphicon glyphicon-log-in"></i> Вход</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+<div class="container" style="margin-top: 20px">
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="color:#428bca; font-weight: bold">Откуда</div>
+            <div class="panel-body">
+                <input id="autocomplete_from" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagId('house1')">
+                <input id="house1" class="form-control" placeholder="номер дома" type="text" style="display: none">
+                <input id="note_from" class="form-control" placeholder="примечание" type="text">
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" style="color: #398439;  font-weight: bold">Куда</div>
+            <div  id="adr1" class="panel-body">
+              <input id="autocomplete_to1" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagId('house2')">
+              <input id="house2" class="form-control" placeholder="номер дома" type="text" style="display: none">
+              <input id="note_to1" class="form-control" placeholder="примечание" type="text">
+            </div>
+            <div id="adr2" class="panel-body" style="display: none">
+                <input id="autocomplete_to2" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagId('house3')">
+                <input id="house3" class="form-control" placeholder="номер дома" type="text" style="display: none">
+                <input id="note_to2" class="form-control" placeholder="примечание" type="text">
+            </div>
+            <div id="adr3" class="panel-body" style="display: none">
+                <input id="autocomplete_to3" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagId('house4')">
+                <input id="house4" class="form-control" placeholder="номер дома" type="text" style="display: none">
+                <input id="note_to3" class="form-control" placeholder="примечание" type="text">
+            </div>
+            <div style="margin-left: 10pt; margin-bottom: 2pt">
+                 <button type="button" class="btn btn-success" onclick="appendAddress()">+</button>
+                 <button type="button" class="btn btn-info" onclick="deleteAddress()">-</button>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" style="color: #428bca;  font-weight: bold">
+                <span data-toggle="collapse" href="#collapse1">Дополнительно </span> <span  data-toggle="collapse" href="#collapse1" class="caret"/>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <span style="margin-right: 10pt; color: #398439">Время подачи</span>
+                    <label class="radio-inline"><input type="radio" name="optradio" onclick="setCurrent()">Сейчас</label>
+                    <label class="radio-inline" ><input type="radio"  name="optradio" onclick="setDate()">Указать время</label><br/>
+                    <div id="setDate" style="margin-top: 7pt; display: none">
+                        <div class="col-xs-2" >
+                           <input id="datepicker" class="form-control" placeholder="день">
+                        </div>
+                        <div class="col-xs-2">
+                            <input id="timepicker" class="form-control timepicker" placeholder="время" >
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                     <label class="checkbox-inline"><input type="checkbox" value=""><span class=""/>Багаж</label>
+                     <label class="checkbox-inline"><input type="checkbox" value=""><span class=""/>Животные</label>
+                    <label class="checkbox-inline"><input type="checkbox" value=""><span class=""/>Не курить</label>
+                    <input id="note_extra" class="form-control" placeholder="примечание" type="text" style="margin-top: 15pt">
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" style="color: #398439;  font-weight: bold"></div>
+        <div class="panel-body">
+            <input id="name" class="form-control" placeholder="имя" type="text">
+            <input id="phoneNo" class="form-control" placeholder="телефон в формате:380661111111" type="text">
+        </div>
+    </div>
+
+    <div class="row" style="margin-left: 2pt; margin-bottom: 3pt">
+        <div class="col-sm-5">
+            <button type="button" class="btn btn-success" > Заказать</button>
+            <button type="button" class="btn btn-info" data-toggle="collapse" href="#collapse2" >Повысить стоимость</button>
+        </div>
+
+        <div class="col-sm-7">
+            <label style="font-size: large;color: #428bca">Стоимость поездки:</label><label style="font-size: large;color: #398439; margin-left: 2pt">70гр</label>
+        </div>
+    </div>
+        <div id="collapse2" class="panel-collapse collapse">
+            <div class="panel-body">
+                <label class="radio-inline"><input type="radio" name="optradio">0гр</label>
+                <label class="radio-inline" ><input type="radio"  name="optradio">10гр</label>
+                <label class="radio-inline"><input type="radio" name="optradio">15гр</label>
+                <label class="radio-inline" ><input type="radio"  name="optradio">20гр</label>
+            </div>
+            <div class="col-sm-2">
+                <input id="" class="form-control timepicker" placeholder="повысить на" >
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+<!-- Footer -->
+<footer id="footer" style="margin-top: 50pt">
+    <div class="container hidden-xs">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4">
+                <div class="column">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="#">Наша история</a></li>
+                        <li><a href="#">Кофиденциальность</a></li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4">
+                <div class="column">
+                    <h4>Поддержка пользователей</h4>
+                    <ul>
+                        <li><i class="fa fa-phone"></i><a href="#">380 (50) 442-5019</a></li>
+                        <li><i class="fa fa-envelope"></i><a href="#">helpdesk@idealogic.com.ua</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 right">
+                <div class="column">
+                    <div class="contact">+380 (93) 791-7878</div>
+                    <div class="company-info">
+                        <ul>
+                            <li>ООО «ИдеяЛоджик»</li>
+                            <li>ЄГРПОУ 12312411</li>
+                            <li>р/с 26501616712</li>
+                            <li>Банк ПАО «ПУМБ»</li>
+                            <li>МФО 351533</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navbar-inverse text-center copyright">
+                Все права защищены © 2016 AllTaxi
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    $(document).ready(function() {
+        $("#datepicker").datepicker();
+        $.datepicker.setDefaults($.datepicker.regional['ru']);
+
+
+        $("#timepicker").wickedpicker({twentyFour: true});
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+    <input id="autocomplete" type="text"
+           placeholder="Введите адрес" style="width: 100%">
+
+<script>
+      var autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), {
+           language: 'ru',
+           componentRestrictions: {country: 'ua'}
+       });
+
+</script>
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsmZOOng0fyFyVtw3zcfjPYeBNmzYh8NA&libraries=places"></script>
+
+</body>
+</html>
