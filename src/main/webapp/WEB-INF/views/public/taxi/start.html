@@ -94,6 +94,7 @@
                 document.getElementById("street"+tagIdSuffix).style.display="block";
             }
 
+            checkReadyForCalc();
         }
 
         //route functions
@@ -166,6 +167,47 @@
             }
 
             return waypoints;
+
+        }
+
+        function checkReadyForCalc(){
+
+
+            if(document.getElementById("autocomplete_from").value!=""
+                    &&(document.getElementById("street1").style.display=="none" || (document.getElementById("street1").style.display!="none" && document.getElementById("street1").value!=""))
+                    && (document.getElementById("house1").style.display=="none" || (document.getElementById("house1").style.display!="none" && document.getElementById("house1").value!="")))
+            {
+
+            }else{
+                return;
+            }
+
+            if(document.getElementById("autocomplete_to1").value!=""
+                    &&(document.getElementById("street2").style.display=="none" || (document.getElementById("street2").style.display!="none" && document.getElementById("street2").value!=""))
+                    && (document.getElementById("house2").style.display=="none" || (document.getElementById("house2").style.display!="none" && document.getElementById("house2").value!="")))
+            {
+
+            }else{
+                return;
+            }
+
+            if((document.getElementById("street3").style.display=="none" || (document.getElementById("street3").style.display!="none" && document.getElementById("street3").value!=""))
+                    && (document.getElementById("house3").style.display=="none" || (document.getElementById("house3").style.display!="none" && document.getElementById("house3").value!="")))
+            {
+
+            }else{
+                return;
+            }
+
+            if((document.getElementById("street4").style.display=="none" || (document.getElementById("street4").style.display!="none" && document.getElementById("street4").value!=""))
+                    && (document.getElementById("house4").style.display=="none" || (document.getElementById("house4").style.display!="none" && document.getElementById("house4").value!="")))
+            {
+
+            }else{
+                return;
+            }
+
+            calcRoute();
 
         }
 
@@ -277,9 +319,9 @@
         <div class="panel panel-default">
             <div class="panel-heading" style="color:#428bca; font-weight: bold">Откуда</div>
             <div class="panel-body">
-                <input id="autocomplete_from" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagIdSuffix('1')">
-                <input id="street1" class="form-control" placeholder="улица" type="text" style="display: none">
-                <input id="house1" class="form-control" placeholder="номер дома" type="text" style="display: none">
+                <input id="autocomplete_from" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagIdSuffix('1')" >
+                <input id="street1" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
+                <input id="house1" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note_from" class="form-control" placeholder="примечание" type="text">
             </div>
         </div>
@@ -287,20 +329,21 @@
         <div class="panel panel-default">
             <div class="panel-heading" style="color: #398439;  font-weight: bold">Куда</div>
             <div  id="adr1" class="panel-body">
-              <input id="autocomplete_to1" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagIdSuffix('2')">
-               <input id="street2" class="form-control" placeholder="улица" type="text" style="display: none">
-              <input id="house2" class="form-control" placeholder="номер дома" type="text" style="display: none">
-              <input id="note_to1" class="form-control" placeholder="примечание" type="text" onclick="calcRoute()">
+              <input id="autocomplete_to1" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagIdSuffix('2')" >
+               <input id="street2" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
+              <input id="house2" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
+              <input id="note_to1" class="form-control" placeholder="примечание" type="text" >
             </div>
             <div id="adr2" class="panel-body" style="display: none">
-                <input id="autocomplete_to2" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagIdSuffix('3')">
-                <input id="street3" class="form-control" placeholder="улица" type="text" style="display: none">
-                <input id="house3" class="form-control" placeholder="номер дома" type="text" style="display: none">
+                <input id="autocomplete_to2" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagIdSuffix('3')" >
+                <input id="street3" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
+                <input id="house3" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note_to2" class="form-control" placeholder="примечание" type="text">
             </div>
             <div id="adr3" class="panel-body" style="display: none">
-                <input id="autocomplete_to3" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagIdSuffix('4')">
-                <input id="house4" class="form-control" placeholder="номер дома" type="text" style="display: none">
+                <input id="autocomplete_to3" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagIdSuffix('4')" >
+                <input id="street4" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
+                <input id="house4" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note_to3" class="form-control" placeholder="примечание" type="text">
             </div>
             <div style="margin-left: 10pt; margin-bottom: 2pt">
@@ -316,7 +359,7 @@
             <div id="collapse1" class="panel-collapse collapse">
                 <div class="panel-body">
                     <span style="margin-right: 10pt; color: #398439">Время подачи</span>
-                    <label class="radio-inline"><input type="radio" name="optradio" onclick="setCurrent()">Сейчас</label>
+                    <label class="radio-inline"><input type="radio" name="optradio" onclick="setCurrent()" checked>Сейчас</label>
                     <label class="radio-inline" ><input type="radio"  name="optradio" onclick="setDate()">Указать время</label><br/>
                     <div id="setDate" style="margin-top: 7pt; display: none">
                         <div class="col-xs-2" >
