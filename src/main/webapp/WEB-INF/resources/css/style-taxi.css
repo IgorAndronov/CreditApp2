@@ -445,3 +445,82 @@ min-height: 1em;
 .form-signin .input-group {
 margin: 7px 0px 7px 0px;
 }
+
+/*-------------------------------------------------------progress spin------------------------------------------*/
+.ball {
+    background-color: rgba(0,0,0,0);
+    border: 2px solid rgba(0,183,229,0.9);
+    opacity: .9;
+    border-top: 1px solid rgba(0,0,0,0);
+    border-left: 1px solid rgba(0,0,0,0);
+    border-radius: 15px;
+    box-shadow: 0 0 15px #2187e7;
+    width: 20px;
+    height: 20px;
+    margin-left: 15px;
+    margin-top:0px ;
+    margin-bottom: 0px;
+    padding: 0px;
+    -moz-animation: spin .5s infinite linear;
+    -webkit-animation: spin .5s infinite linear;
+}
+
+.ball1 {
+    background-color: rgba(0,0,0,0);
+    border: 2px solid rgba(0,183,229,0.9);
+    opacity: .9;
+    border-top: 1px solid rgba(0,0,0,0);
+    border-left: 1px solid rgba(0,0,0,0);
+    border-radius: 5px;
+    box-shadow: 0 0 5px #2187e7;
+    width: 12px;
+    height: 12px;
+    margin-left: 19px;
+    margin-top:0px ;
+    margin-bottom: 0px;
+    padding: 0px;
+    position: relative;
+    top: -17px;
+    -moz-animation: spinoff .5s infinite linear;
+    -webkit-animation: spinoff .5s infinite linear;
+}
+
+@-moz-keyframes spin {
+    0% {
+        -moz-transform: rotate(0deg);
+    }
+
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-moz-keyframes spinoff {
+    0% {
+        -moz-transform: rotate(0deg);
+    }
+
+    100% {
+        -moz-transform: rotate(-360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spinoff {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(-360deg);
+    }
+}
