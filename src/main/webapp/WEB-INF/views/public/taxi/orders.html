@@ -18,7 +18,9 @@
 
 <!--GoogleApi-->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsmZOOng0fyFyVtw3zcfjPYeBNmzYh8NA&signed_in=true&libraries=places&callback=initMap"
-            async defer></script>
+            async defer>
+
+    </script>
 
 
     <script>
@@ -38,6 +40,22 @@
         document.getElementById("accept1").disabled=false;
         document.getElementById("cancel1").style.visibility="hidden";
         //change ammount to origin
+    }
+
+    function progress(){
+        document.getElementById("cancel1").style.visibility="visible";
+        document.getElementById("progress").style.display="block";
+        document.getElementById("waitingText").innerHTML="ожидание подтверждения клиента";
+
+        putFooterBottom();
+    }
+
+    function orderReady(){
+        document.getElementById("progress").style.display="none";
+        document.getElementById("orderResult").style.display="block";
+        document.getElementById("cancel1").style.visibility="hidden";
+
+        putFooterBottom();
     }
 
     function putFooterBottom(){
@@ -249,6 +267,7 @@
                 <th>Откуда</th>
                 <th>Куда</th>
                 <th>Стоимость</th>
+                <th>Дополнительно</th>
                 <th></th>
             </tr>
             </thead>
@@ -258,9 +277,10 @@
                 <td>Лепсе 6д</td>
                 <td>Броварский переулок, 6</td>
                 <td>70гр</td>
+                <td> <img src="../../../resources/images/taxi/nosmoke.png"></td>
                 <td>
-                        <button id="accept1" type="button" class="btn btn-success btn-xs" onclick="progress()">Принять</button>
-                        <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="propose()">Предложить</button>
+                        <button id="accept1" type="button" data-toggle="modal" data-target="#modalTimeSelect" class="btn btn-success btn-xs">Принять</button>
+                        <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modalProposal" onclick="propose()">Предложить</button>
                         <button id="cancel1" type="button" class="btn btn-danger btn-xs" style="visibility:hidden" onclick="cancelPrposal()">Отменить</button>
 
                 </td>
@@ -271,6 +291,7 @@
                 <td>Лепсе 6д</td>
                 <td>Броварский переулок, 6</td>
                 <td>70гр</td>
+                <td> <img src="../../../resources/images/taxi/nosmoke.png"></td>
                 <td>
 
                         <button type="button" class="btn btn-success btn-xs" onclick="progress()">Принять</button>
@@ -284,6 +305,10 @@
                 <td>Лепсе 6д</td>
                 <td>Броварский переулок, 6</td>
                 <td>70гр</td>
+                <td> <img src="../../../resources/images/taxi/nosmoke.png">
+                    <img src="../../../resources/images/taxi/animals.png">
+                    <img src="../../../resources/images/taxi/lagadge.png">
+                </td>
                 <td>
 
                         <button type="button" class="btn btn-success btn-xs" onclick="progress()">Принять</button>
@@ -297,20 +322,43 @@
                 <td>Лепсе 6д</td>
                 <td>Броварский переулок, 6</td>
                 <td>70гр</td>
+                <td> <img src="../../../resources/images/taxi/nosmoke.png"></td>
                 <td>
 
                         <button type="button" class="btn btn-success btn-xs" onclick="progress()">Принять</button>
                         <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal">Предложить</button>
                         <button id="cancel4" type="button" class="btn btn-danger btn-xs" style="visibility:hidden">Отменить</button>
-                 
+
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
 
+    <div  style="margin-left: 30%; margin-bottom: 70px" >
+        <div id="progress" style="display: none">
+            <div style="float: left">
+                <div class="ball"></div>
+                <div class="ball1"></div>
+            </div>
+            <label id="waitingText" style="font-weight: normal; color:#5CB85C; float: left; margin-left: 10pt">ожидание подтверждения</label>
+        </div>
+        <div id="orderResult" style="display: none; font-weight: normal" >
+            <span style="color:#5CB85C; margin-left: 0%">Имя клиента:</span><span style="color: #428bca;margin-left: 2pt">Сергей</span><br/>
+            <span style="color:#5CB85C; margin-left: 0%">Телефон:</span><span style="color: #428bca;margin-left: 2pt">050 1234567</span><br/>
+            <span style="color:#5CB85C; margin-left: 0%">Время:</span><span style="color: #428bca;margin-left: 2pt">19:15</span><br/>
+            <span style="color:#5CB85C; margin-left: 0%">Дополнительно:</span><span style="color: #428bca;margin-left: 2pt">
+                 <img src="../../../resources/images/taxi/nosmoke.png">
+                    <img src="../../../resources/images/taxi/animals.png">
+                    <img src="../../../resources/images/taxi/lagadge.png">
+                 <span id="note_extra" class="form-control" type="text" style="margin-top: 15pt;margin-left: -15%" ></span>
+            </span><br/>
+            <button id="cancelCurrent" type="button" class="btn btn-danger btn-xs" style="margin-top: 5pt; margin-left: 20%">Отменить</button>
+        </div>
+    </div>
+
     <!-- Modal -->
-    <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal fade" id="modalProposal" role="dialog">
         <div class="modal-dialog">
 
             <!-- Modal content-->
@@ -322,12 +370,12 @@
                 <div class="modal-body">
                     <div class="panel-body">
                         <label class="radio-inline"><input type="radio" name="optradio">0гр</label>
-                        <label class="radio-inline" ><input type="radio"  name="optradio">10гр</label>
+                        <label class="radio-inline"><input type="radio"  name="optradio">10гр</label>
                         <label class="radio-inline"><input type="radio" name="optradio">15гр</label>
                         <label class="radio-inline" ><input type="radio"  name="optradio">20гр</label>
                     </div>
                     <div class="col-sm-4">
-                        <input id="" class="form-control timepicker" placeholder="повысить на" >
+                        <input id="" class="form-control" placeholder="повысить на" >
                     </div><br/>
                 </div>
                 <div class="modal-footer" style="margin-top: 5pt">
@@ -336,8 +384,41 @@
             </div>
 
         </div>
+     </div>
+
+
+    <!--ModalTimeSelect-->
+    <div class="modal fade" id="modalTimeSelect" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Прибытие через</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <label class="radio-inline"><input type="radio" name="optradio">0мин</label>
+                        <label class="radio-inline"><input type="radio" name="optradio">5мин</label>
+                        <label class="radio-inline"><input type="radio"  name="optradio">10мин</label>
+                        <label class="radio-inline"><input type="radio" name="optradio">15мин</label>
+                        <label class="radio-inline" ><input type="radio"  name="optradio">20мин</label>
+                    </div>
+                    <div class="col-sm-4">
+                        <input  class="form-control" placeholder="в минутах" >
+                    </div><br/>
+                </div>
+                <div class="modal-footer" style="margin-top: 5pt">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="orderReady()">Ok</button>
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
+
+
+</div> <!--container-->
 
 
 <!-- Footer -->
@@ -385,14 +466,5 @@
     </div>
 </footer>
 
-<script>
-    $(document).ready(function() {
-        $("#datepicker").datepicker();
-        $.datepicker.setDefaults($.datepicker.regional['ru']);
-
-
-        $("#timepicker").wickedpicker({twentyFour: true});
-    });
-</script>
 </body>
 </html>
