@@ -9,6 +9,7 @@
 
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Bootstrap Example</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,7 +46,7 @@
         function initAutocomplete(){
             // Create the autocomplete object, restricting the search to geographical
             // location types.
-            var autocompliteList  = document.getElementsByName("autocomplete");
+            var autocompliteList  = document.getElementsByClassName("autocomplete");
 
             for( var i= 0; i< autocompliteList.length; i++){
                 var autocomplete = new google.maps.places.Autocomplete(
@@ -288,6 +289,48 @@
 //            }
         }
     </script>
+
+    <script>
+      function sendAjax(){
+          var data = {};
+          $.ajax({
+              type : "POST",
+              contentType : "application/json",
+              url : "order",
+              data : JSON.stringify(data),
+              dataType : 'json',
+              timeout : 100000,
+              success : function(data) {
+                  console.log("SUCCESS: ", data);
+                  display(data);
+              },
+              error : function(e) {
+                  console.log("ERROR: ", e);
+                  display(e);
+              },
+              done : function(e) {
+                  console.log("DONE");
+              }
+          });
+
+//          var xhttp;
+//          if (window.XMLHttpRequest) {
+//              xhttp = new XMLHttpRequest();
+//          } else {
+//              // code for IE6, IE5
+//              xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+//          }
+//          xhttp.onreadystatechange = function() {
+//              if (xhttp.readyState == 4 && xhttp.status == 200) {
+//                  document.getElementById("carDetails").innerHTML=xhttp.responseText;
+//              }
+//          };
+//          xhttp.open("POST", "order", true);
+//          xhttp.send();
+          switchOrderScreen();
+      }
+
+    </script>
 </head>
 <body>
 
@@ -352,13 +395,13 @@
 </nav>
 
 
-
+<form method="post" >
 <div class="container" style="margin-top: 20px">
     <div id="orderInfo" class="panel-group" style="display: block">
         <div class="panel panel-default">
             <div class="panel-heading" style="color:#428bca; font-weight: bold">Откуда</div>
             <div class="panel-body">
-                <input id="autocomplete_from" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagIdSuffix('1')"
+                <input id="autocomplete_from" class="form-control autocomplete" placeholder="адресс" type="text"   name ="autocomplete_from" onclick="setTagIdSuffix('1')"
                        value="${clientOrderData.get("addressFrom").getAddressFull()}" >
                 <input id="street1" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()"
                        value="${clientOrderData.get("addressFrom").getAddressStreet()}">
@@ -372,19 +415,19 @@
         <div class="panel panel-default">
             <div class="panel-heading" style="color: #398439;  font-weight: bold">Куда</div>
             <div  id="adr1" class="panel-body">
-                <input id="autocomplete_to1" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagIdSuffix('2')" >
+                <input id="autocomplete_to1" class="form-control autocomplete" placeholder="адресс" type="text"  name = "autocomplete_to1" onclick="setTagIdSuffix('2')" >
                 <input id="street2" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="house2" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note_to1" class="form-control" placeholder="примечание" type="text" >
             </div>
             <div id="adr2" class="panel-body" style="display: none">
-                <input id="autocomplete_to2" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagIdSuffix('3')" >
+                <input id="autocomplete_to2" class="form-control autocomplete" placeholder="адресс" type="text" name="autocomplete_to2" onclick="setTagIdSuffix('3')" >
                 <input id="street3" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="house3" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note_to2" class="form-control" placeholder="примечание" type="text">
             </div>
             <div id="adr3" class="panel-body" style="display: none">
-                <input id="autocomplete_to3" class="form-control" placeholder="адресс" type="text" name="autocomplete" onclick="setTagIdSuffix('4')" >
+                <input id="autocomplete_to3" class="form-control autocomplete" placeholder="адресс" type="text"  name ="autocomplete_to3" onclick="setTagIdSuffix('4')" >
                 <input id="street4" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="house4" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note_to3" class="form-control" placeholder="примечание" type="text">
@@ -516,7 +559,7 @@
             <label id="waitingText" style="font-weight: normal; color:#5CB85C; float: left; margin-left: 10pt">ожидание подтверждения</label>
         </div>
         <div id="orderResult" style="display: none; font-weight: normal" >
-            <span style="color:#5CB85C; margin-left: 0%">За вами приедет авто:</span><span style="color: #428bca;margin-left: 2pt">chevrolet aveo синий AA123456XD</span><br/>
+            <span style="color:#5CB85C; margin-left: 0%">За вами приедет авто:</span><span id="carDetails" style="color: #428bca;margin-left: 2pt"></span><br/>
             <span style="color:#5CB85C; margin-left: 0%">Телефон водителя:</span><span style="color: #428bca;margin-left: 2pt">050 1234567</span><br/>
             <span style="color:#5CB85C; margin-left: 0%">Ориентировочное время:</span><span style="color: #428bca;margin-left: 2pt">19:15</span><br/>
             <button id="cancelCurrent" type="button" class="btn btn-danger btn-xs" style="margin-top: 5pt; margin-left: 20%">Отменить</button>
@@ -538,7 +581,7 @@
 
     <div class="row" style="margin-left: 2pt; margin-bottom: 3pt">
         <div class="col-sm-5">
-            <button type="button" class="btn btn-success" onclick="switchOrderScreen()"> Заказать</button>
+            <button type="button" class="btn btn-success" onclick="sendAjax()"> Заказать</button>
             <button type="button" class="btn btn-info" data-toggle="collapse" href="#collapse2" >Повысить стоимость</button>
         </div>
 
@@ -562,11 +605,11 @@
 
 
 </div>
-
+</form>>
 
 <!-- Footer -->
 <br/>
-<footer id="footer" style="margin-top: 50pt">
+<footer id="footer1" style="margin-top: 50pt">
     <div class="container hidden-xs">
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-4">

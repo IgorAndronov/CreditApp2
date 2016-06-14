@@ -35,7 +35,7 @@ public class OrderDetails {
         Map<String,Address> address = new HashMap<>();
 
         addressFrom = new Address();
-        addressFrom.setAddressFull("sdfsfasf");
+        addressFrom.setAddressFull("");
         address.put("addressFrom", addressFrom);
 
         return address;

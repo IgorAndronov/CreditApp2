@@ -45,7 +45,7 @@
     </filter>
     <filter-mapping>
         <filter-name>EncodingFilter</filter-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/*</url-pattern>
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>REQUEST</dispatcher>
