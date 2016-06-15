@@ -1,7 +1,12 @@
 package com.mycompany.credit.web.utils;
 
+
+import org.apache.commons.io.IOUtils;
+
 import javax.servlet.*;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 public class EncodingFilter  implements Filter {
 

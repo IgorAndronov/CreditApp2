@@ -15,13 +15,13 @@ public class OrderDetails {
     Address addressTo2;
     Address addressTo3;
 
-    public  void setOrderDetails(Map<String,String> order){
+    public  Long setOrderDetails(Map<String,String> order){
 
         for(String k:order.keySet()){
             System.out.println(k+":"+order.get(k));
         }
-
-
+     Long orderId = 5L;
+     return orderId;
     };
 
     public  Map<String,Address> getOrderDetails(Integer userId){
@@ -40,4 +40,15 @@ public class OrderDetails {
 
         return address;
     }
+
+    public CarDetails getCar(Long orderId){
+        CarDetails carDetails= new CarDetails();
+
+        carDetails.setCarModel("Nissan X-Trail 2005");
+        carDetails.setCarNumber("AA1234VB");
+        carDetails.setDriverPhone("067 2637836");
+
+        return carDetails;
+    }
+
 }

@@ -82,6 +82,7 @@
 
             var houseNo;
             var street;
+            var city;
             // Get each component of the address from the place details
             // and fill the corresponding field on the form.
             for (var i = 0; i < place.address_components.length; i++) {
@@ -93,14 +94,22 @@
                     if(addressType=="route"){
                         street = place.address_components[i][componentForm[addressType]];
                     }
+                    if(addressType=="locality"){
+                        city = place.address_components[i][componentForm[addressType]];
+                        document.getElementById("city"+tagIdSuffix).value =city;
+                    }
 
                 }
             }
             if (houseNo==undefined){
                 document.getElementById("house"+tagIdSuffix).style.display="block";
+            }else{
+                document.getElementById("house"+tagIdSuffix).value = houseNo;
             }
             if (street==undefined){
                 document.getElementById("street"+tagIdSuffix).style.display="block";
+            }else{
+                document.getElementById("street"+tagIdSuffix).value ="street";
             }
 
             checkReadyForCalc();
@@ -114,8 +123,8 @@
         var destination;
         function calcRoute() {
             var directionsService = new google.maps.DirectionsService;
-            var start = document.getElementById("autocomplete_from").value;
-            destination = document.getElementById("autocomplete_to1").value;
+            var start = document.getElementById("autocomplete1").value;
+            destination = document.getElementById("autocomplete2").value;
             var waypoints = getWayPoints();
             var request = {
                 origin:start,
@@ -149,30 +158,30 @@
         function getWayPoints(){
             var waypoints =[];
 
-            if(document.getElementById("autocomplete_to2").value!=""){
-                if(document.getElementById("autocomplete_to3").value==""){
+            if(document.getElementById("autocomplete3").value!=""){
+                if(document.getElementById("autocomplete4").value==""){
                     //address from distination goes to intermidiate point
-                    var waypoint = {location:document.getElementById("autocomplete_to1").value,
+                    var waypoint = {location:document.getElementById("autocomplete2").value,
                         stopover:true};
                     waypoints.push(waypoint);
-                    destination = document.getElementById("autocomplete_to2").value;
+                    destination = document.getElementById("autocomplete3").value;
 
                 }else{
-                    var waypoint = {location:document.getElementById("autocomplete_to1").value,
+                    var waypoint = {location:document.getElementById("autocomplete2").value,
                         stopover:true};
-                    var waypoint2 = {location:document.getElementById("autocomplete_to2").value,
+                    var waypoint2 = {location:document.getElementById("autocomplete3").value,
                         stopover:true};
                     waypoints.push(waypoint);
                     waypoints.push(waypoint2);
 
-                    destination = document.getElementById("autocomplete_to3").value;
+                    destination = document.getElementById("autocomplete4").value;
                 }
 
-            }else if(document.getElementById("autocomplete_to3").value!=""){
-                var waypoint = {location:document.getElementById("autocomplete_to1").value,
+            }else if(document.getElementById("autocomplete4").value!=""){
+                var waypoint = {location:document.getElementById("autocomplete2").value,
                     stopover:true};
                 waypoints.push(waypoint);
-                destination = document.getElementById("autocomplete_to3").value;
+                destination = document.getElementById("autocomplete4").value;
             }
 
             return waypoints;
@@ -180,9 +189,10 @@
         }
 
         function checkReadyForCalc(){
+            document.getElementById("makeOrder").disabled=true;
+            document.getElementById("cost").innerHTML="";
 
-
-            if(document.getElementById("autocomplete_from").value!=""
+            if(document.getElementById("autocomplete1").value!=""
                     &&(document.getElementById("street1").style.display=="none" || (document.getElementById("street1").style.display!="none" && document.getElementById("street1").value!=""))
                     && (document.getElementById("house1").style.display=="none" || (document.getElementById("house1").style.display!="none" && document.getElementById("house1").value!="")))
             {
@@ -191,7 +201,7 @@
                 return;
             }
 
-            if(document.getElementById("autocomplete_to1").value!=""
+            if(document.getElementById("autocomplete2").value!=""
                     &&(document.getElementById("street2").style.display=="none" || (document.getElementById("street2").style.display!="none" && document.getElementById("street2").value!=""))
                     && (document.getElementById("house2").style.display=="none" || (document.getElementById("house2").style.display!="none" && document.getElementById("house2").value!="")))
             {
@@ -217,6 +227,7 @@
             }
 
             calcRoute();
+            document.getElementById("makeOrder").disabled=false;
 
         }
 
@@ -228,13 +239,17 @@
             putFooterBottom();
         }
 
-        function orderReady(){
+        function orderResult(carInfo){
+
+           window.alert(carInfo.carModel);
+
             document.getElementById("progress").style.display="none";
             document.getElementById("orderResult").style.display="block";
             document.getElementById("cancel1").style.visibility="hidden";
 
             putFooterBottom();
         }
+
 
     </script>
 
@@ -291,19 +306,16 @@
     </script>
 
     <script>
-      function sendAjax(){
-          var data = {};
+      function sendAjax(url, cfunc, dataToSend){
+
           $.ajax({
               type : "POST",
               contentType : "application/json",
-              url : "order",
-              data : JSON.stringify(data),
+              url : url,
+              data : JSON.stringify(dataToSend),
               dataType : 'json',
               timeout : 100000,
-              success : function(data) {
-                  console.log("SUCCESS: ", data);
-                  display(data);
-              },
+              success : cfunc,
               error : function(e) {
                   console.log("ERROR: ", e);
                   display(e);
@@ -313,22 +325,48 @@
               }
           });
 
-//          var xhttp;
-//          if (window.XMLHttpRequest) {
-//              xhttp = new XMLHttpRequest();
-//          } else {
-//              // code for IE6, IE5
-//              xhttp = new ActiveXObject("Microsoft.XMLHTTP");
-//          }
-//          xhttp.onreadystatechange = function() {
-//              if (xhttp.readyState == 4 && xhttp.status == 200) {
-//                  document.getElementById("carDetails").innerHTML=xhttp.responseText;
-//              }
-//          };
-//          xhttp.open("POST", "order", true);
-//          xhttp.send();
-          switchOrderScreen();
+
       }
+
+        function executeOrder(){
+            var data = {};
+            data["autocomplete1"] = document.getElementById("autocomplete1").value;
+            data["city1"] = document.getElementById("city1").value;
+            data["street1"] = document.getElementById("street1").value;
+            data["house1"] = document.getElementById("house1").value;
+            data["note1"] = document.getElementById("note1").value;
+
+            data["autocomplete2"] = document.getElementById("autocomplete2").value;
+            data["city2"] = document.getElementById("city2").value;
+            data["street2"] = document.getElementById("street2").value;
+            data["house2"] = document.getElementById("house2").value;
+            data["note2"] = document.getElementById("note2").value;
+
+            data["autocomplete3"] = document.getElementById("autocomplete3").value;
+            data["city3"] = document.getElementById("city3").value;
+            data["street3"] = document.getElementById("street3").value;
+            data["house3"] = document.getElementById("house3").value;
+            data["note3"] = document.getElementById("note3").value;
+
+            data["autocomplete4"] = document.getElementById("autocomplete4").value;
+            data["city4"] = document.getElementById("city4").value;
+            data["street4"] = document.getElementById("street4").value;
+            data["house4"] = document.getElementById("house4").value;
+            data["note4"] = document.getElementById("note4").value;
+
+            sendAjax("order",orderSave,data);
+            switchOrderScreen();
+        }
+
+        var orderId;
+        function orderSave(inputData){
+            orderId=inputData;
+            var data = {};
+            data["orderId"]=orderId;
+
+            sendAjax("getCar",orderResult,data);
+        }
+
 
     </script>
 </head>
@@ -401,36 +439,46 @@
         <div class="panel panel-default">
             <div class="panel-heading" style="color:#428bca; font-weight: bold">Откуда</div>
             <div class="panel-body">
-                <input id="autocomplete_from" class="form-control autocomplete" placeholder="адресс" type="text"   name ="autocomplete_from" onclick="setTagIdSuffix('1')"
+                <input id="autocomplete1" class="form-control autocomplete" placeholder="адресс" type="text"   name ="autocomplete1"
+                       onclick="setTagIdSuffix('1')" onchange="checkReadyForCalc()"
                        value="${clientOrderData.get("addressFrom").getAddressFull()}" >
-                <input id="street1" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()"
+                <input id="street1" class="form-control" placeholder="улица" type="text" style="display: none"
+                       onchange="checkReadyForCalc()"
                        value="${clientOrderData.get("addressFrom").getAddressStreet()}">
-                <input id="house1" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()"
+                <input id="house1" class="form-control" placeholder="номер дома" type="text" style="display: none"
+                       onchange="checkReadyForCalc()"
                        value="${clientOrderData.get("addressFrom").getAddressHouse()}">
-                <input id="note_from" class="form-control" placeholder="примечание" type="text"
+                <input id="note1" class="form-control" placeholder="примечание" type="text"
                        value="${clientOrderData.get("addressFrom").getDetails()}">
+                <input id="city1" style="display: none" value="">
             </div>
         </div>
 
         <div class="panel panel-default">
             <div class="panel-heading" style="color: #398439;  font-weight: bold">Куда</div>
             <div  id="adr1" class="panel-body">
-                <input id="autocomplete_to1" class="form-control autocomplete" placeholder="адресс" type="text"  name = "autocomplete_to1" onclick="setTagIdSuffix('2')" >
+                <input id="autocomplete2" class="form-control autocomplete" placeholder="адресс" type="text"  name = "autocomplete2"
+                       onclick="setTagIdSuffix('2')" onchange="checkReadyForCalc()">
                 <input id="street2" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="house2" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
-                <input id="note_to1" class="form-control" placeholder="примечание" type="text" >
+                <input id="note2" class="form-control" placeholder="примечание" type="text" >
+                <input id="city2" style="display: none" value="">
             </div>
             <div id="adr2" class="panel-body" style="display: none">
-                <input id="autocomplete_to2" class="form-control autocomplete" placeholder="адресс" type="text" name="autocomplete_to2" onclick="setTagIdSuffix('3')" >
+                <input id="autocomplete3" class="form-control autocomplete" placeholder="адресс" type="text" name="autocomplete3"
+                       onclick="setTagIdSuffix('3')" onchange="checkReadyForCalc()" >
                 <input id="street3" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="house3" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
-                <input id="note_to2" class="form-control" placeholder="примечание" type="text">
+                <input id="note3" class="form-control" placeholder="примечание" type="text">
+                <input id="city3" style="display: none" value="">
             </div>
             <div id="adr3" class="panel-body" style="display: none">
-                <input id="autocomplete_to3" class="form-control autocomplete" placeholder="адресс" type="text"  name ="autocomplete_to3" onclick="setTagIdSuffix('4')" >
+                <input id="autocomplete4" class="form-control autocomplete" placeholder="адресс" type="text"  name ="autocomplete4"
+                       onclick="setTagIdSuffix('4')" onchange="checkReadyForCalc()" >
                 <input id="street4" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="house4" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
-                <input id="note_to3" class="form-control" placeholder="примечание" type="text">
+                <input id="note4" class="form-control" placeholder="примечание" type="text">
+                <input id="city4" style="display: none" value="">
             </div>
             <div style="margin-left: 10pt; margin-bottom: 2pt">
                 <button type="button" class="btn btn-success" onclick="appendAddress()">+</button>
@@ -581,7 +629,7 @@
 
     <div class="row" style="margin-left: 2pt; margin-bottom: 3pt">
         <div class="col-sm-5">
-            <button type="button" class="btn btn-success" onclick="sendAjax()"> Заказать</button>
+            <button id="makeOrder" type="button" class="btn btn-success" onclick="executeOrder()" disabled > Заказать</button>
             <button type="button" class="btn btn-info" data-toggle="collapse" href="#collapse2" >Повысить стоимость</button>
         </div>
 

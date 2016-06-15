@@ -1,9 +1,13 @@
 package com.mycompany.credit.web.taxi;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.credit.logic.taxi.Address;
+import com.mycompany.credit.logic.taxi.CarDetails;
 import com.mycompany.credit.logic.taxi.OrderDetails;
 import com.mycompany.credit.web.LoginController;
 import com.mycompany.credit.web.utils.LocaleUsage;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +19,7 @@ import static com.mycompany.credit.web.utils.WebConstants.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
@@ -48,23 +53,46 @@ public class ClientsOrderController {
     }
 
     @RequestMapping(value = PUBLIC_PAGES_PATH+"taxi/order" , method = RequestMethod.POST)
-    public @ResponseBody String setOrder(@RequestParam Map<String,String> params, HttpServletRequest req, HttpServletResponse response) {
+    public @ResponseBody String setOrder(HttpServletRequest request, HttpServletResponse response) {
 
-        String localeFromRequest=params.get("locale");
-        String locale = LocaleUsage.setSessionLocale(req.getSession(), localeFromRequest);
-
-        ModelAndView model = new ModelAndView();
-        model.addObject("car", "Машина");
-
+        String orderData="";
         try {
-            byte ptext[] = "Машина".getBytes("ISO-8859-1");
-            String value = new String(ptext, "UTF-8");
-            return value;
-        } catch (UnsupportedEncodingException e) {
+            orderData = IOUtils.toString(request.getInputStream(), "utf-8");
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, String> map = mapper.readValue(orderData, new TypeReference<Map<String,String>>(){});
+
+            OrderDetails orderDetails = new OrderDetails();
+            Long orderId = orderDetails.setOrderDetails(map);
+
+            return orderId.toString();
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
        return "";
+    }
+
+    @RequestMapping(value = PUBLIC_PAGES_PATH+"taxi/getCar" , method = RequestMethod.POST)
+    public @ResponseBody String getCar(HttpServletRequest request, HttpServletResponse response) {
+
+        String orderData="";
+        try {
+            orderData = IOUtils.toString(request.getInputStream(), "utf-8");
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, String> map = mapper.readValue(orderData, new TypeReference<Map<String,String>>(){});
+
+            OrderDetails orderDetails = new OrderDetails();
+            CarDetails carDetails = orderDetails.getCar(Long.getLong(map.get("orderId")));
+
+            String carDetailsJson = mapper.writeValueAsString(carDetails);
+            return carDetailsJson;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 
 
