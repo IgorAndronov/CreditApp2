@@ -239,16 +239,7 @@
             putFooterBottom();
         }
 
-        function orderResult(carInfo){
 
-           window.alert(carInfo.carModel);
-
-            document.getElementById("progress").style.display="none";
-            document.getElementById("orderResult").style.display="block";
-            document.getElementById("cancel1").style.visibility="hidden";
-
-            putFooterBottom();
-        }
 
 
     </script>
@@ -325,6 +316,71 @@
               }
           });
 
+
+      }
+
+      function orderResult(carInfo){
+
+          document.getElementById("carModel").innerHTML = carInfo.carModel + " " + carInfo.carNumber;
+          document.getElementById("driverPhone").innerHTML = carInfo.driverPhone;
+          document.getElementById("arrivalTime").innerHTML = carInfo.arrivalTime;
+          if(carInfo.carExtraInfo!=""){
+              document.getElementById("extraCarInfo1").style.display="block";
+              document.getElementById("extraCarInfo").innerHTML = carInfo.carExtraInfo;
+          };
+          if(carInfo.carQuality!="" || carInfo.driverQuality!=""){
+              document.getElementById("qualityInfo").style.display="block";
+              if(carInfo.carQuality=="1"){
+                  document.getElementById("carImg").src="../../../resources/images/taxi/CarSmBad.png";
+                  document.getElementById("carImg").title="плохое состояние";
+              };
+              if(carInfo.carQuality=="2"){
+                  document.getElementById("carImg").src="../../../resources/images/taxi/CarSmNorm.png";
+                  document.getElementById("carImg").title="нормальное состояние";
+              };
+              if(carInfo.carQuality=="3"){
+                  document.getElementById("carImg").src="../../../resources/images/taxi/CarSm.png";
+                  document.getElementById("carImg").title="хорошее состояние";
+              };
+              //mood
+              if(carInfo.driverQuality=="1"){
+                  document.getElementById("moodImg").src="../../../resources/images/taxi/angrySm.png";
+                  document.getElementById("moodImg").title="агрессивный водитель";
+              };
+              if(carInfo.driverQuality=="2"){
+                  document.getElementById("moodImg").src="../../../resources/images/taxi/normalSm.png";
+                  document.getElementById("moodImg").title="обычный водитель";
+              };
+              if(carInfo.driverQuality=="3"){
+                  document.getElementById("moodImg").src="../../../resources/images/taxi/smileSm.png";
+                  document.getElementById("moodImg").title="дружелюбный водитель";
+              };
+
+         }
+
+          document.getElementById("progress").style.display="none";
+          document.getElementById("orderResult").style.display="block";
+          document.getElementById("cancel1").style.visibility="hidden";
+
+          var elements = document.getElementsByClassName("acept");
+          for(var i = 0; i<elements.length;i++ ){
+              elements[i].disabled=true;
+          }
+
+
+
+          putFooterBottom();
+      }
+
+      function cancelOrder(){
+          document.getElementById("progress").style.display="none";
+          document.getElementById("orderResult").style.display="none";
+          document.getElementById("cancel1").style.visibility="hidden";
+
+          var elements = document.getElementsByClassName("acept");
+          for(var i = 0; i<elements.length;i++ ){
+              elements[i].disabled=false;
+          }
 
       }
 
@@ -540,7 +596,7 @@
                 <td>80гр</td>
                 <td>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-success btn-xs" onclick="progress()">Принять</button>
+                        <button type="button" class="btn btn-success btn-xs acept" onclick="progress()" >Принять</button>
                         <button id="cancel1" type="button" class="btn btn-danger btn-xs" style="visibility:hidden">Отменить</button>
                     </div>
                 </td>
@@ -554,7 +610,7 @@
                 <td>15мин</td>
                 <td>75гр</td>
                 <td><div class="btn-group">
-                    <button type="button" class="btn btn-success btn-xs" onclick="progress()">Принять</button>
+                    <button type="button" class="btn btn-success btn-xs acept" onclick="progress()">Принять</button>
                     <button id="cancel2" type="button" class="btn btn-danger btn-xs" style="visibility:hidden">Отменить</button>
                 </div></td>
             </tr>
@@ -566,7 +622,7 @@
                 <td>10мин</td>
                 <td>100гр</td>
                 <td><div class="btn-group">
-                    <button type="button" class="btn btn-success btn-xs" onclick="progress()">Принять</button>
+                    <button type="button" class="btn btn-success btn-xs acept" onclick="progress()">Принять</button>
                     <button id="cancel3" type="button" class="btn btn-danger btn-xs" style="visibility:hidden">Отменить</button>
                 </div></td>
             </tr>
@@ -578,7 +634,7 @@
                 <td>20мин</td>
                 <td>80гр</td>
                 <td><div class="btn-group">
-                    <button type="button" class="btn btn-success btn-xs" onclick="progress()">Принять</button>
+                    <button type="button" class="btn btn-success btn-xs acept" onclick="progress()">Принять</button>
                     <button id="cancel4" type="button" class="btn btn-danger btn-xs" style="visibility:hidden">Отменить</button>
                 </div></td>
             </tr>
@@ -590,7 +646,7 @@
                 <td>5мин</td>
                 <td>90гр</td>
                 <td><div class="btn-group">
-                    <button type="button" class="btn btn-success btn-xs" onclick="progress()">Принять</button>
+                    <button type="button" class="btn btn-success btn-xs acept" onclick="progress()">Принять</button>
                     <button id="cancel5" type="button" class="btn btn-danger btn-xs" style="visibility:hidden">Отменить</button>
                 </div></td>
             </tr>
@@ -607,10 +663,18 @@
             <label id="waitingText" style="font-weight: normal; color:#5CB85C; float: left; margin-left: 10pt">ожидание подтверждения</label>
         </div>
         <div id="orderResult" style="display: none; font-weight: normal" >
-            <span style="color:#5CB85C; margin-left: 0%">За вами приедет авто:</span><span id="carDetails" style="color: #428bca;margin-left: 2pt"></span><br/>
-            <span style="color:#5CB85C; margin-left: 0%">Телефон водителя:</span><span style="color: #428bca;margin-left: 2pt">050 1234567</span><br/>
-            <span style="color:#5CB85C; margin-left: 0%">Ориентировочное время:</span><span style="color: #428bca;margin-left: 2pt">19:15</span><br/>
-            <button id="cancelCurrent" type="button" class="btn btn-danger btn-xs" style="margin-top: 5pt; margin-left: 20%">Отменить</button>
+            <span style="color:#5CB85C; margin-left: 0%">За вами приедет авто:</span><span id="carModel" style="color: #428bca;margin-left: 2pt"></span><br/>
+            <span style="color:#5CB85C; margin-left: 0%">Телефон водителя:</span><span id="driverPhone" style="color: #428bca;margin-left: 2pt">050 1234567</span><br/>
+            <span style="color:#5CB85C; margin-left: 0%">Ориентировочное время:</span><span id="arrivalTime" style="color: #428bca;margin-left: 2pt">19:15</span><br/>
+            <span id="extraCarInfo1" style="color:#5CB85C; margin-left: 0%;display: none">Доп инфо:</span><span id="extraCarInfo" style="color: #428bca;margin-left: 2pt"></span><br/>
+            <div id = "qualityInfo" style="display: none">
+                <span  style="color:#5CB85C; margin-left: 0%;">Рейтинг: </span><span  style="color: #428bca;margin-left: 2pt">
+                     <img id="carImg" src="" data-toggle="tooltip" data-placement="top" title="">
+                     <img id="moodImg" src="" data-toggle="tooltip" data-placement="top" title="">
+                </span>  <br/>
+            </div>
+
+            <button id="cancelCurrent" type="button" class="btn btn-danger btn-xs" style="margin-top: 5pt; margin-left: 20%" onclick="cancelOrder()">Отменить</button>
         </div>
     </div>
 
@@ -618,7 +682,7 @@
     <div class="panel panel-default">
         <div class="panel-heading" style="color: #398439;  font-weight: bold"></div>
         <div class="panel-body">
-            <input id="name" class="form-control" placeholder="имя" type="text" onclick="orderReady()">
+            <input id="name" class="form-control" placeholder="имя" type="text">
             <input id="phoneNo" class="form-control" placeholder="телефон в формате:380661111111" type="text">
         </div>
     </div>
@@ -708,6 +772,10 @@
 
         $("#timepicker").wickedpicker({twentyFour: true});
         putFooterBottom();
+
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     });
 </script>
 </body>

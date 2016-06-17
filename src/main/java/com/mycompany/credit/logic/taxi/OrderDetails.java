@@ -47,6 +47,9 @@ public class OrderDetails {
         carDetails.setCarModel("Nissan X-Trail 2005");
         carDetails.setCarNumber("AA1234VB");
         carDetails.setDriverPhone("067 2637836");
+        carDetails.setArrivalTime("19:15");
+        carDetails.setCarQuality("3");
+        carDetails.setDriverQuality("3");
 
         return carDetails;
     }

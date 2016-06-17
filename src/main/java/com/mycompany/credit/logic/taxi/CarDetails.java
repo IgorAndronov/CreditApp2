@@ -11,6 +11,7 @@ public class CarDetails {
     private String carQuality="";
     private String carExtraInfo="";
     private String driverQuality="";
+    private String arrivalTime="";
 
     public String getCarModel() {
         return carModel;
@@ -66,5 +67,13 @@ public class CarDetails {
 
     public void setCarNumber(String carNumber) {
         this.carNumber = carNumber;
+    }
+
+    public String getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(String arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 }
