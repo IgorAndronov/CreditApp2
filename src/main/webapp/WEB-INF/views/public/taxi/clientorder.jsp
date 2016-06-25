@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../../../resources/js/wickedpicker.js"></script>
+    <script type="text/javascript" src="../../../resources/js/datepicker_ru.js"></script>
     <script src="../../../resources/js/template.js"></script>
 
     <!--GoogleApi-->
@@ -59,6 +60,7 @@
         }
 
         function fillInAddress() {
+
             var componentForm = {
                 street_number: 'short_name',
                 route: 'long_name',
@@ -121,10 +123,18 @@
 
         }
         var destination;
+        var autocomplete1;
+        var autocomplete2;
+        var autocomplete3;
+        var autocomplete4;
+
         function calcRoute() {
             var directionsService = new google.maps.DirectionsService;
-            var start = document.getElementById("autocomplete1").value;
-            destination = document.getElementById("autocomplete2").value;
+
+            var start = autocomplete1;
+            destination = autocomplete2;
+
+
             var waypoints = getWayPoints();
             var request = {
                 origin:start,
@@ -136,6 +146,9 @@
             directionsService.route(request, function(response, status) {
                 if (status == google.maps.DirectionsStatus.OK) {
                     directionsDisplay(response);
+                    document.getElementById("makeOrder").disabled=false;
+                }else{
+                    document.getElementById("cost").innerText="уточните адрес"
                 }
             });
         }
@@ -151,7 +164,11 @@
 
             }
 
-            document.getElementById("cost").innerText = Math.round(distance/1000*7) + "гр.";
+            var rate = 7;
+            if(distance>20000){
+                rate = 6;
+            }
+            document.getElementById("cost").innerText = Math.round(distance/1000*rate) + "гр.";
 
         }
 
@@ -161,27 +178,28 @@
             if(document.getElementById("autocomplete3").value!=""){
                 if(document.getElementById("autocomplete4").value==""){
                     //address from distination goes to intermidiate point
-                    var waypoint = {location:document.getElementById("autocomplete2").value,
+
+                    var waypoint = {location:autocomplete2,
                         stopover:true};
                     waypoints.push(waypoint);
-                    destination = document.getElementById("autocomplete3").value;
+                    destination = autocomplete3;
 
                 }else{
-                    var waypoint = {location:document.getElementById("autocomplete2").value,
+                    var waypoint = {location:autocomplete2,
                         stopover:true};
-                    var waypoint2 = {location:document.getElementById("autocomplete3").value,
+                    var waypoint2 = {location:autocomplete3,
                         stopover:true};
                     waypoints.push(waypoint);
                     waypoints.push(waypoint2);
 
-                    destination = document.getElementById("autocomplete4").value;
+                    destination = autocomplete4;;
                 }
 
             }else if(document.getElementById("autocomplete4").value!=""){
-                var waypoint = {location:document.getElementById("autocomplete2").value,
+                var waypoint = {location:autocomplete2,
                     stopover:true};
                 waypoints.push(waypoint);
-                destination = document.getElementById("autocomplete4").value;
+                destination = autocomplete4;
             }
 
             return waypoints;
@@ -189,6 +207,11 @@
         }
 
         function checkReadyForCalc(){
+            autocomplete1=document.getElementById("autocomplete1").value;
+            autocomplete2=document.getElementById("autocomplete2").value;
+            autocomplete3=document.getElementById("autocomplete3").value;
+            autocomplete4=document.getElementById("autocomplete4").value;
+
             document.getElementById("makeOrder").disabled=true;
             document.getElementById("cost").innerHTML="";
 
@@ -196,6 +219,11 @@
                     &&(document.getElementById("street1").style.display=="none" || (document.getElementById("street1").style.display!="none" && document.getElementById("street1").value!=""))
                     && (document.getElementById("house1").style.display=="none" || (document.getElementById("house1").style.display!="none" && document.getElementById("house1").value!="")))
             {
+                if(document.getElementById("street1").style.display!="none"){
+                    autocomplete1=document.getElementById("street1").value+" "+document.getElementById("house1").value +","+document.getElementById("autocomplete1").value;
+                }else{
+                    autocomplete1= document.getElementById("house1").value +","+autocomplete1;
+                }
 
             }else{
                 return;
@@ -205,6 +233,11 @@
                     &&(document.getElementById("street2").style.display=="none" || (document.getElementById("street2").style.display!="none" && document.getElementById("street2").value!=""))
                     && (document.getElementById("house2").style.display=="none" || (document.getElementById("house2").style.display!="none" && document.getElementById("house2").value!="")))
             {
+                if(document.getElementById("street2").style.display!="none"){
+                    autocomplete2=document.getElementById("street1").value+" "+document.getElementById("house1").value +","+document.getElementById("autocomplete1").value;
+                }else{
+                    autocomplete2= document.getElementById("house2").value +","+autocomplete2;
+                }
 
             }else{
                 return;
@@ -213,6 +246,11 @@
             if((document.getElementById("street3").style.display=="none" || (document.getElementById("street3").style.display!="none" && document.getElementById("street3").value!=""))
                     && (document.getElementById("house3").style.display=="none" || (document.getElementById("house3").style.display!="none" && document.getElementById("house3").value!="")))
             {
+                if(document.getElementById("street3").style.display!="none"){
+                    autocomplete3=document.getElementById("street3").value+" "+document.getElementById("house3").value +","+document.getElementById("autocomplete3").value;
+                }else{
+                    autocomplete3= document.getElementById("house3").value +","+autocomplete3;
+                }
 
             }else{
                 return;
@@ -221,13 +259,18 @@
             if((document.getElementById("street4").style.display=="none" || (document.getElementById("street4").style.display!="none" && document.getElementById("street4").value!=""))
                     && (document.getElementById("house4").style.display=="none" || (document.getElementById("house4").style.display!="none" && document.getElementById("house4").value!="")))
             {
+                if(document.getElementById("street4").style.display!="none"){
+                    autocomplete4=document.getElementById("street4").value+" "+document.getElementById("house4").value +","+document.getElementById("autocomplete4").value;
+                }else{
+                    autocomplete4= document.getElementById("house4").value +","+autocomplete4;
+                }
 
             }else{
                 return;
             }
 
             calcRoute();
-            document.getElementById("makeOrder").disabled=false;
+
 
         }
 
@@ -246,27 +289,33 @@
 
     <script>
         function appendAddress(){
-            var adr2 = document.getElementById("adr2");
             var adr3 = document.getElementById("adr3");
+            var adr4 = document.getElementById("adr4");
 
-            if (adr2.style.display=="none"){
-                adr2.style.display="block";
-                document.getElementById("BtnDelAddr").style.visibility="visible";
-            }else if (adr3.style.display=="none"){
+            if (adr3.style.display=="none"){
                 adr3.style.display="block";
+                document.getElementById("BtnDelAddr").style.visibility="visible";
+            }else if (adr4.style.display=="none"){
+                adr4.style.display="block";
                 document.getElementById("BtnDelAddr").style.visibility="visible";
             }
         }
 
         function deleteAddress(){
 
-            var adr2 = document.getElementById("adr2");
             var adr3 = document.getElementById("adr3");
+            var adr4 = document.getElementById("adr4");
 
-            if (adr3.style.display!="none"){
+            if (adr4.style.display!="none"){
+                adr4.style.display="none";
+                document.getElementById("autocomplete4").innerHTML="";
+                document.getElementById("street4").innerHTML="";
+                document.getElementById("house4").innerHTML="";
+            }else if (adr3.style.display!="none"){
                 adr3.style.display="none";
-            }else if (adr2.style.display!="none"){
-                adr2.style.display="none";
+                document.getElementById("autocomplete3").innerHTML="";
+                document.getElementById("street3").innerHTML="";
+                document.getElementById("house3").innerHTML="";
                 document.getElementById("BtnDelAddr").style.visibility="hidden";
             }
         }
@@ -496,7 +545,7 @@
             <div class="panel-heading" style="color:#428bca; font-weight: bold">Откуда</div>
             <div class="panel-body">
                 <input id="autocomplete1" class="form-control autocomplete" placeholder="адресс" type="text"   name ="autocomplete1"
-                       onclick="setTagIdSuffix('1')" onchange="checkReadyForCalc()"
+                       onclick="setTagIdSuffix('1')"
                        value="${clientOrderData.get("addressFrom").getAddressFull()}" >
                 <input id="street1" class="form-control" placeholder="улица" type="text" style="display: none"
                        onchange="checkReadyForCalc()"
@@ -512,25 +561,25 @@
 
         <div class="panel panel-default">
             <div class="panel-heading" style="color: #398439;  font-weight: bold">Куда</div>
-            <div  id="adr1" class="panel-body">
+            <div  id="adr2" class="panel-body">
                 <input id="autocomplete2" class="form-control autocomplete" placeholder="адресс" type="text"  name = "autocomplete2"
-                       onclick="setTagIdSuffix('2')" onchange="checkReadyForCalc()">
+                       onclick="setTagIdSuffix('2')" >
                 <input id="street2" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="house2" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note2" class="form-control" placeholder="примечание" type="text" >
                 <input id="city2" style="display: none" value="">
             </div>
-            <div id="adr2" class="panel-body" style="display: none">
+            <div id="adr3" class="panel-body" style="display: none">
                 <input id="autocomplete3" class="form-control autocomplete" placeholder="адресс" type="text" name="autocomplete3"
-                       onclick="setTagIdSuffix('3')" onchange="checkReadyForCalc()" >
+                       onclick="setTagIdSuffix('3')" >
                 <input id="street3" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="house3" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note3" class="form-control" placeholder="примечание" type="text">
                 <input id="city3" style="display: none" value="">
             </div>
-            <div id="adr3" class="panel-body" style="display: none">
+            <div id="adr4" class="panel-body" style="display: none">
                 <input id="autocomplete4" class="form-control autocomplete" placeholder="адресс" type="text"  name ="autocomplete4"
-                       onclick="setTagIdSuffix('4')" onchange="checkReadyForCalc()" >
+                       onclick="setTagIdSuffix('4')" >
                 <input id="street4" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="house4" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note4" class="form-control" placeholder="примечание" type="text">
@@ -767,7 +816,7 @@
 <script>
     $(document).ready(function() {
         $("#datepicker").datepicker();
-        $.datepicker.setDefaults($.datepicker.regional['ru']);
+        $.datepicker.setDefaults($.datepicker.regional['ua']);
 
 
         $("#timepicker").wickedpicker({twentyFour: true});
