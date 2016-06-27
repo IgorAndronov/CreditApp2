@@ -524,3 +524,7 @@ margin: 7px 0px 7px 0px;
         -webkit-transform: rotate(-360deg);
     }
 }
+
+.pagination>li>a{
+    background-color: transparent;
+}

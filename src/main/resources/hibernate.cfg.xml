@@ -24,9 +24,13 @@
 
         <!-- Disable the second-level cache  -->
         <!--<property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>-->
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.use_query_cache">true</property>
 
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
 
         <!-- Drop and re-create the database schema on startup -->
         <!--<property name="hbm2ddl.auto">validate</property>-->
@@ -57,7 +61,9 @@
         <mapping class="com.mycompany.credit.dao.entity.client.dictionary.VDicStreetType"/>
         <mapping class="com.mycompany.credit.dao.entity.client.dictionary.VDicUsersStatus"/>
         <mapping class="com.mycompany.credit.dao.entity.client.dictionary.VDicWwwType"/>
-
+        <mapping class="com.mycompany.taxi.dao.entity.ClientOrdersEntity"/>
+        <mapping class="com.mycompany.taxi.dao.entity.ClientOrdersExtraInfoEntity"/>
+        <mapping class="com.mycompany.taxi.dao.entity.ClientOrderResultEntity"/>
 
 
     </session-factory>

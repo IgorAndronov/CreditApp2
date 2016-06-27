@@ -234,7 +234,7 @@
                     && (document.getElementById("house2").style.display=="none" || (document.getElementById("house2").style.display!="none" && document.getElementById("house2").value!="")))
             {
                 if(document.getElementById("street2").style.display!="none"){
-                    autocomplete2=document.getElementById("street1").value+" "+document.getElementById("house1").value +","+document.getElementById("autocomplete1").value;
+                    autocomplete2=document.getElementById("street2").value+" "+document.getElementById("house2").value +","+document.getElementById("autocomplete2").value;
                 }else{
                     autocomplete2= document.getElementById("house2").value +","+autocomplete2;
                 }
@@ -289,6 +289,7 @@
 
     <script>
         function appendAddress(){
+            document.getElementById("cost").innerText="";
             var adr3 = document.getElementById("adr3");
             var adr4 = document.getElementById("adr4");
 
@@ -299,25 +300,32 @@
                 adr4.style.display="block";
                 document.getElementById("BtnDelAddr").style.visibility="visible";
             }
+            checkReadyForCalc();
         }
 
         function deleteAddress(){
+            document.getElementById("cost").innerText="";
 
             var adr3 = document.getElementById("adr3");
             var adr4 = document.getElementById("adr4");
 
             if (adr4.style.display!="none"){
                 adr4.style.display="none";
-                document.getElementById("autocomplete4").innerHTML="";
-                document.getElementById("street4").innerHTML="";
-                document.getElementById("house4").innerHTML="";
+                document.getElementById("autocomplete4").value="";
+                document.getElementById("street4").value="";
+                document.getElementById("house4").value="";
+                document.getElementById("street4").style.display="none";
+                document.getElementById("house4").style.display="none";
             }else if (adr3.style.display!="none"){
                 adr3.style.display="none";
-                document.getElementById("autocomplete3").innerHTML="";
-                document.getElementById("street3").innerHTML="";
-                document.getElementById("house3").innerHTML="";
+                document.getElementById("autocomplete3").value="";
+                document.getElementById("street3").value="";
+                document.getElementById("house3").value="";
+                document.getElementById("street3").style.display="none";
+                document.getElementById("house3").style.display="none";
                 document.getElementById("BtnDelAddr").style.visibility="hidden";
             }
+            checkReadyForCalc();
         }
 
         function setDate(){
@@ -520,6 +528,13 @@
             </button>
             <!-- text logo on mobile view -->
             <a class="navbar-brand visible-xs" href="index.html" style="font-weight: bold;color:#398439;font-size: 2em">All <label style="color:  #428bca">taxi</label></a>
+            <div  style="float: right; margin-right: 5pt" class="visible-xs">
+                <ul  class="pagination pagination-sm" style="margin-top: 6pt; margin-bottom:0pt ">
+                    <li><a href="#">RU</a></li>
+                    <li><a href="#">UKR</a></li>
+                    <li><a href="#">EN</a></li>
+                </ul>
+            </div>
         </div>
         <div class="navbar-collapse navbar-ex1-collapse collapse" id="collapsedBar">
             <ul class="nav navbar-nav">
@@ -533,6 +548,13 @@
                     </div>
                 </li>
             </ul>
+            <div  style="float: right" class="hidden-xs">
+                <ul  class="pagination pagination-sm" style="margin-top: 6pt; margin-bottom:0pt ">
+                    <li><a href="#">RU</a></li>
+                    <li><a href="#">UKR</a></li>
+                    <li><a href="#">EN</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
@@ -544,7 +566,7 @@
         <div class="panel panel-default">
             <div class="panel-heading" style="color:#428bca; font-weight: bold">Откуда</div>
             <div class="panel-body">
-                <input id="autocomplete1" class="form-control autocomplete" placeholder="адресс" type="text"   name ="autocomplete1"
+                <input id="autocomplete1" class="form-control autocomplete" placeholder="адрес" type="text"   name ="autocomplete1"
                        onclick="setTagIdSuffix('1')"
                        value="${clientOrderData.get("addressFrom").getAddressFull()}" >
                 <input id="street1" class="form-control" placeholder="улица" type="text" style="display: none"
@@ -562,7 +584,7 @@
         <div class="panel panel-default">
             <div class="panel-heading" style="color: #398439;  font-weight: bold">Куда</div>
             <div  id="adr2" class="panel-body">
-                <input id="autocomplete2" class="form-control autocomplete" placeholder="адресс" type="text"  name = "autocomplete2"
+                <input id="autocomplete2" class="form-control autocomplete" placeholder="адрес" type="text"  name = "autocomplete2"
                        onclick="setTagIdSuffix('2')" >
                 <input id="street2" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="house2" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
@@ -570,7 +592,7 @@
                 <input id="city2" style="display: none" value="">
             </div>
             <div id="adr3" class="panel-body" style="display: none">
-                <input id="autocomplete3" class="form-control autocomplete" placeholder="адресс" type="text" name="autocomplete3"
+                <input id="autocomplete3" class="form-control autocomplete" placeholder="адрес" type="text" name="autocomplete3"
                        onclick="setTagIdSuffix('3')" >
                 <input id="street3" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="house3" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
@@ -578,7 +600,7 @@
                 <input id="city3" style="display: none" value="">
             </div>
             <div id="adr4" class="panel-body" style="display: none">
-                <input id="autocomplete4" class="form-control autocomplete" placeholder="адресс" type="text"  name ="autocomplete4"
+                <input id="autocomplete4" class="form-control autocomplete" placeholder="адрес" type="text"  name ="autocomplete4"
                        onclick="setTagIdSuffix('4')" >
                 <input id="street4" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="house4" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
