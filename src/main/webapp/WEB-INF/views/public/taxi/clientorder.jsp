@@ -43,16 +43,37 @@
             initRoute();
         }
 
+        function del(){
+            document.getElementById("street2").style.zIndex=-2;
+            document.getElementById("street_input2").style.zIndex=1;
+            var tmp=document.getElementById("street2").value;
+            console.info("tmp before = "+tmp);
+            tmp=tmp.replace(document.getElementById("autocomplete2").value+",","");
+            console.info("tmp after= "+tmp);
+            document.getElementById("street_input2").value=tmp;
+            document.getElementById("street2").value = document.getElementById("autocomplete2").value +","+tmp ;
+            console.info( document.getElementById("street2").value);
+
+
+        }
+
         //autocomplete functions
         function initAutocomplete(){
             // Create the autocomplete object, restricting the search to geographical
             // location types.
             var autocompliteList  = document.getElementsByClassName("autocomplete");
+            var defaultBounds = new google.maps.LatLngBounds(
+                    new google.maps.LatLng(50.1526235, 30.7481790));
+
+            var options = {
+                types: ['geocode'],
+                componentRestrictions: {country: 'ua'}
+            };
 
             for( var i= 0; i< autocompliteList.length; i++){
                 var autocomplete = new google.maps.places.Autocomplete(
                         (document.getElementById(autocompliteList[i].getAttribute("id"))),
-                        {types: ['geocode']});
+                        options);
                 // When the user selects an address from the dropdown, populate the address
                 // fields in the form.
                 autocomplete.addListener('place_changed', fillInAddress);
@@ -80,6 +101,8 @@
             document.getElementById("house"+tagIdSuffix).style.display = "none";
             document.getElementById("street"+tagIdSuffix).value = '';
             document.getElementById("street"+tagIdSuffix).style.display = "none";
+            document.getElementById("street_input"+tagIdSuffix).value = '';
+            document.getElementById("street_input"+tagIdSuffix).style.display = "none";
 
 
             var houseNo;
@@ -110,8 +133,12 @@
             }
             if (street==undefined){
                 document.getElementById("street"+tagIdSuffix).style.display="block";
+                document.getElementById("street_input"+tagIdSuffix).style.display="block";
+                document.getElementById("street_input"+tagIdSuffix).style.position="absolute"
+                document.getElementById("street_input"+tagIdSuffix).style.left= document.getElementById("street"+tagIdSuffix).style.left;
+                document.getElementById("street_input"+tagIdSuffix).style.top= document.getElementById("street"+tagIdSuffix).style.top;
             }else{
-                document.getElementById("street"+tagIdSuffix).value ="street";
+                document.getElementById("street"+tagIdSuffix).value =street;
             }
 
             checkReadyForCalc();
@@ -156,6 +183,11 @@
         function directionsDisplay(directionsResult){
             var distance=0;
             var directionsRoutes = directionsResult.routes;
+            var geocoded_waypoints = directionsResult.geocoded_waypoints;
+
+            for(var i=0; i<geocoded_waypoints.length;i++){
+                console.info(geocoded_waypoints[i].place_id);
+            }
 
             for(var i = 0; i<directionsRoutes.length; i++){
                 for(var k =0; k<directionsRoutes[i].legs.length; k++){
@@ -578,6 +610,7 @@
                 <input id="note1" class="form-control" placeholder="примечание" type="text"
                        value="${clientOrderData.get("addressFrom").getDetails()}">
                 <input id="city1" style="display: none" value="">
+
             </div>
         </div>
 
@@ -586,7 +619,8 @@
             <div  id="adr2" class="panel-body">
                 <input id="autocomplete2" class="form-control autocomplete" placeholder="адрес" type="text"  name = "autocomplete2"
                        onclick="setTagIdSuffix('2')" >
-                <input id="street2" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
+                <input id="street_input2" class="form-control"  type="text" style="display: none; z-index:-2">
+                <input id="street2" class="form-control autocomplete" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()" oninput="del()">
                 <input id="house2" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note2" class="form-control" placeholder="примечание" type="text" >
                 <input id="city2" style="display: none" value="">

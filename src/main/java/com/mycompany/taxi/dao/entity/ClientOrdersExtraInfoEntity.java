@@ -6,7 +6,7 @@ import org.hibernate.annotations.Cache;
 import javax.persistence.*;
 
 /**
- * Created by admin on 26.06.2016.
+ * Created by admin on 28.06.2016.
  */
 @Entity
 @Cache(usage= CacheConcurrencyStrategy.READ_WRITE, region="kiev")
@@ -17,40 +17,10 @@ public class ClientOrdersExtraInfoEntity {
     private Boolean baggage;
     private Boolean noSmoking;
     private String note;
-    private ClientOrdersEntity order;
-
-    @Basic
-    @Column(name = "animal")
-    public boolean isAnimal() {
-        return animal;
-    }
-
-    public void setAnimal(boolean animal) {
-        this.animal = animal;
-    }
-
-    @Basic
-    @Column(name = "baggage")
-    public boolean isBaggage() {
-        return baggage;
-    }
-
-    public void setBaggage(boolean baggage) {
-        this.baggage = baggage;
-    }
-
-    @Basic
-    @Column(name = "no_smoking")
-    public boolean isNoSmoking() {
-        return noSmoking;
-    }
-
-    public void setNoSmoking(boolean noSmoking) {
-        this.noSmoking = noSmoking;
-    }
+    private ClientOrdersEntity clientOrder;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     public long getId() {
         return id;
     }
@@ -60,7 +30,7 @@ public class ClientOrdersExtraInfoEntity {
     }
 
     @Basic
-    @Column(name = "animal")
+    @Column(name = "animal", nullable = true)
     public Boolean getAnimal() {
         return animal;
     }
@@ -70,7 +40,7 @@ public class ClientOrdersExtraInfoEntity {
     }
 
     @Basic
-    @Column(name = "baggage")
+    @Column(name = "baggage", nullable = true)
     public Boolean getBaggage() {
         return baggage;
     }
@@ -80,7 +50,7 @@ public class ClientOrdersExtraInfoEntity {
     }
 
     @Basic
-    @Column(name = "no_smoking")
+    @Column(name = "no_smoking", nullable = true)
     public Boolean getNoSmoking() {
         return noSmoking;
     }
@@ -90,7 +60,7 @@ public class ClientOrdersExtraInfoEntity {
     }
 
     @Basic
-    @Column(name = "note")
+    @Column(name = "note", nullable = true, length = -1)
     public String getNote() {
         return note;
     }
@@ -125,14 +95,13 @@ public class ClientOrdersExtraInfoEntity {
         return result;
     }
 
-
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
-    public ClientOrdersEntity getOrder() {
-        return order;
+    public ClientOrdersEntity getClientOrder() {
+        return clientOrder;
     }
 
-    public void setOrder(ClientOrdersEntity order) {
-        this.order = order;
+    public void setClientOrder(ClientOrdersEntity clientOrder) {
+        this.clientOrder = clientOrder;
     }
 }
