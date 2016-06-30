@@ -43,17 +43,34 @@
             initRoute();
         }
 
-        function del(){
-            document.getElementById("street2").style.zIndex=-2;
-            document.getElementById("street_input2").style.zIndex=1;
-            var tmp=document.getElementById("street2").value;
-            console.info("tmp before = "+tmp);
-            tmp=tmp.replace(document.getElementById("autocomplete2").value+",","");
-            console.info("tmp after= "+tmp);
-            document.getElementById("street_input2").value=tmp;
-            document.getElementById("street2").value = document.getElementById("autocomplete2").value +","+tmp ;
-            console.info( document.getElementById("street2").value);
+        function switchToStreetInput(){
+            document.getElementById("street_input"+tagIdSuffix).style.display="block";
+            document.getElementById("street"+tagIdSuffix).style.zIndex=-2;
+            document.getElementById("street_input"+tagIdSuffix).style.zIndex=1;
 
+            var tmp=document.getElementById("street"+tagIdSuffix).value;
+            tmp=tmp.replace(document.getElementById("autocomplete"+tagIdSuffix).value+",","");
+
+            document.getElementById("street_input"+tagIdSuffix).value=tmp;
+            document.getElementById("street"+tagIdSuffix).value = document.getElementById("autocomplete"+tagIdSuffix).value +","+tmp ;
+
+        }
+
+        function switchToStreet(){
+            document.getElementById("street"+tagIdSuffix).value=document.getElementById("street_input"+tagIdSuffix).value;
+            document.getElementById("street"+tagIdSuffix).style.zIndex=2;
+            document.getElementById("street_input"+tagIdSuffix).style.display="none";
+        }
+
+
+        function resetfields(){
+            document.getElementById("street"+tagIdSuffix).value = '';
+            document.getElementById("street_input"+tagIdSuffix).value = '';
+            document.getElementById("house"+tagIdSuffix).value = '';
+
+            document.getElementById("street"+tagIdSuffix).style.display = 'none';
+            document.getElementById("street_input"+tagIdSuffix).style.display = 'none';
+            document.getElementById("house"+tagIdSuffix).style.display = 'none';
 
         }
 
@@ -62,8 +79,6 @@
             // Create the autocomplete object, restricting the search to geographical
             // location types.
             var autocompliteList  = document.getElementsByClassName("autocomplete");
-            var defaultBounds = new google.maps.LatLngBounds(
-                    new google.maps.LatLng(50.1526235, 30.7481790));
 
             var options = {
                 types: ['geocode'],
@@ -96,14 +111,8 @@
             var placeId = place.place_id;
 
 
-
             document.getElementById("house"+tagIdSuffix).value = '';
             document.getElementById("house"+tagIdSuffix).style.display = "none";
-            document.getElementById("street"+tagIdSuffix).value = '';
-            document.getElementById("street"+tagIdSuffix).style.display = "none";
-            document.getElementById("street_input"+tagIdSuffix).value = '';
-            document.getElementById("street_input"+tagIdSuffix).style.display = "none";
-
 
             var houseNo;
             var street;
@@ -137,8 +146,14 @@
                 document.getElementById("street_input"+tagIdSuffix).style.position="absolute"
                 document.getElementById("street_input"+tagIdSuffix).style.left= document.getElementById("street"+tagIdSuffix).style.left;
                 document.getElementById("street_input"+tagIdSuffix).style.top= document.getElementById("street"+tagIdSuffix).style.top;
+
+                document.getElementById("street"+tagIdSuffix).value = '';
+                document.getElementById("street_input"+tagIdSuffix).value = '';
+                document.getElementById("street_input"+tagIdSuffix).style.display = "none";
             }else{
-                document.getElementById("street"+tagIdSuffix).value =street;
+                //document.getElementById("street"+tagIdSuffix).value =street;
+                document.getElementById("street_input"+tagIdSuffix).style.display="none";
+
             }
 
             checkReadyForCalc();
@@ -599,10 +614,12 @@
             <div class="panel-heading" style="color:#428bca; font-weight: bold">Откуда</div>
             <div class="panel-body">
                 <input id="autocomplete1" class="form-control autocomplete" placeholder="адрес" type="text"   name ="autocomplete1"
-                       onclick="setTagIdSuffix('1')"
+                       onclick="setTagIdSuffix('1')" onchange="resetfields()"
                        value="${clientOrderData.get("addressFrom").getAddressFull()}" >
-                <input id="street1" class="form-control" placeholder="улица" type="text" style="display: none"
+                <input id="street_input1" class="form-control autocomplete"  type="text" style="display: none; z-index:-2">
+                <input id="street1" class="form-control autocomplete" placeholder="улица" type="text" style="display: none"
                        onchange="checkReadyForCalc()"
+                       oninput="switchToStreetInput()" onblur="switchToStreet()"
                        value="${clientOrderData.get("addressFrom").getAddressStreet()}">
                 <input id="house1" class="form-control" placeholder="номер дома" type="text" style="display: none"
                        onchange="checkReadyForCalc()"
@@ -618,25 +635,27 @@
             <div class="panel-heading" style="color: #398439;  font-weight: bold">Куда</div>
             <div  id="adr2" class="panel-body">
                 <input id="autocomplete2" class="form-control autocomplete" placeholder="адрес" type="text"  name = "autocomplete2"
-                       onclick="setTagIdSuffix('2')" >
-                <input id="street_input2" class="form-control"  type="text" style="display: none; z-index:-2">
-                <input id="street2" class="form-control autocomplete" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()" oninput="del()">
+                       onclick="setTagIdSuffix('2')" onchange="resetfields()">
+                <input id="street_input2" class="form-control autocomplete"  type="text" style="display: none; z-index:-2">
+                <input id="street2" class="form-control autocomplete" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()" oninput="switchToStreetInput()" onblur="switchToStreet()">
                 <input id="house2" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
-                <input id="note2" class="form-control" placeholder="примечание" type="text" >
+                <input id="note2" class="form-control" placeholder="примечание" type="text">
                 <input id="city2" style="display: none" value="">
             </div>
             <div id="adr3" class="panel-body" style="display: none">
                 <input id="autocomplete3" class="form-control autocomplete" placeholder="адрес" type="text" name="autocomplete3"
-                       onclick="setTagIdSuffix('3')" >
-                <input id="street3" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
+                       onclick="setTagIdSuffix('3')" onchange="resetfields()" >
+                <input id="street_input3" class="form-control autocomplete"  type="text" style="display: none; z-index:-2">
+                <input id="street3" class="form-control autocomplete" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()" oninput="switchToStreetInput()" onblur="switchToStreet()">
                 <input id="house3" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note3" class="form-control" placeholder="примечание" type="text">
                 <input id="city3" style="display: none" value="">
             </div>
             <div id="adr4" class="panel-body" style="display: none">
                 <input id="autocomplete4" class="form-control autocomplete" placeholder="адрес" type="text"  name ="autocomplete4"
-                       onclick="setTagIdSuffix('4')" >
-                <input id="street4" class="form-control" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()">
+                       onclick="setTagIdSuffix('4')" onchange="resetfields()">
+                <input id="street_input4" class="form-control autocomplete"  type="text" style="display: none; z-index:-2">
+                <input id="street4" class="form-control autocomplete" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()" oninput="switchToStreetInput()" onblur="switchToStreet()">
                 <input id="house4" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note4" class="form-control" placeholder="примечание" type="text">
                 <input id="city4" style="display: none" value="">

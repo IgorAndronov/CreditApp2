@@ -37,6 +37,7 @@ public class ClientsOrderController {
 
     @RequestMapping(value = PUBLIC_PAGES_PATH+"taxi/order" , method = RequestMethod.GET)
     public ModelAndView getPage(@RequestParam Map<String,String> params, HttpServletRequest req) {
+        System.out.println("!!!!!!!!!get page");
 
         String localeFromRequest=params.get("locale");
         String locale = LocaleUsage.setSessionLocale(req.getSession(), localeFromRequest);
@@ -46,8 +47,8 @@ public class ClientsOrderController {
         Integer userId = (req.getSession().getAttribute(LOGIN_CONTROLLER))==null ? 0:((LoginController)req.getSession().getAttribute(LOGIN_CONTROLLER)).getUserId();
 
         //Prepare client data (fields to be shown on the screen)
-        Map<String,Address> clientOrderData = orderDetails.getOrderDetails(userId);
-        model.addObject("clientOrderData", clientOrderData);
+     //   Map<String,Address> clientOrderData = orderDetails.getOrderDetails(userId);
+     //   model.addObject("clientOrderData", clientOrderData);
 
 
         return model;
@@ -61,6 +62,7 @@ public class ClientsOrderController {
             orderData = IOUtils.toString(request.getInputStream(), "utf-8");
             ObjectMapper mapper = new ObjectMapper();
             Map<String, String> map = mapper.readValue(orderData, new TypeReference<Map<String,String>>(){});
+            System.out.println("!!!!!!!!"+map);
 
             OrderDetails orderDetails = new OrderDetails();
             Long orderId = orderDetails.setOrderDetails(map);
@@ -82,6 +84,7 @@ public class ClientsOrderController {
             orderData = IOUtils.toString(request.getInputStream(), "utf-8");
             ObjectMapper mapper = new ObjectMapper();
             Map<String, String> map = mapper.readValue(orderData, new TypeReference<Map<String,String>>(){});
+            System.out.println("!!!!!!!!!!"+map);
 
             OrderDetails orderDetails = new OrderDetails();
             CarDetails carDetails = orderDetails.getCar(Long.getLong(map.get("orderId")));
