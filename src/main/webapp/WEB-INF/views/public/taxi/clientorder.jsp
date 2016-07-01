@@ -151,7 +151,8 @@
                 document.getElementById("street_input"+tagIdSuffix).value = '';
                 document.getElementById("street_input"+tagIdSuffix).style.display = "none";
             }else{
-                //document.getElementById("street"+tagIdSuffix).value =street;
+                document.getElementById("street"+tagIdSuffix).value =street;
+                document.getElementById("street_input"+tagIdSuffix).value =street;
                 document.getElementById("street_input"+tagIdSuffix).style.display="none";
 
             }
@@ -380,6 +381,8 @@
         }
         function setCurrent(){
             document.getElementById("setDate").style.display="none";
+            document.getElementById("datepicker").value="";
+            document.getElementById("timepicker").value="";
         }
 
         function switchOrderScreen(){
@@ -513,6 +516,14 @@
             data["street4"] = document.getElementById("street4").value;
             data["house4"] = document.getElementById("house4").value;
             data["note4"] = document.getElementById("note4").value;
+
+            data["arrivalDate"] = document.getElementById("datepicker").value;
+            data["arrivalTime"] = document.getElementById("timepicker").value;
+
+            data["baggage"]=document.getElementById("baggage").value;
+            data["animals"]=document.getElementById("animals").value;
+            data["nosmoking"]=document.getElementById("nosmoking").value;
+            data["note_extra"]=document.getElementById("note_extra").value;
 
             sendAjax("order",orderSave,data);
             switchOrderScreen();
@@ -685,9 +696,9 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <label class="checkbox-inline"><input type="checkbox" value=""><span class=""/>Багаж</label>
-                    <label class="checkbox-inline"><input type="checkbox" value=""><span class=""/>Животные</label>
-                    <label class="checkbox-inline"><input type="checkbox" value=""><span class=""/>Не курить</label>
+                    <label class="checkbox-inline"><input id="baggage" type="checkbox" value=""><span class=""/>Багаж</label>
+                    <label class="checkbox-inline"><input id="animals" type="checkbox" value=""><span class=""/>Животные</label>
+                    <label class="checkbox-inline"><input id="nosmoking" type="checkbox" value=""><span class=""/>Не курить</label>
                     <input id="note_extra" class="form-control" placeholder="примечание" type="text" style="margin-top: 15pt">
                 </div>
             </div>
