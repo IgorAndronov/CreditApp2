@@ -47,8 +47,8 @@ public class ClientsOrderController {
         Integer userId = (req.getSession().getAttribute(LOGIN_CONTROLLER))==null ? 0:((LoginController)req.getSession().getAttribute(LOGIN_CONTROLLER)).getUserId();
 
         //Prepare client data (fields to be shown on the screen)
-        Map<String,Address> clientOrderData = orderDetails.getOrderDetails(userId);
-        model.addObject("clientOrderData", clientOrderData);
+      //  Map<String,Address> clientOrderData = orderDetails.getOrderDetails(userId);
+      //  model.addObject("clientOrderData", clientOrderData);
 
 
         return model;

@@ -27,7 +27,7 @@
     <script src="../../../resources/js/template.js"></script>
 
     <!--GoogleApi-->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsmZOOng0fyFyVtw3zcfjPYeBNmzYh8NA&signed_in=true&libraries=places&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?language=ru&region=UA&key=AIzaSyBsmZOOng0fyFyVtw3zcfjPYeBNmzYh8NA&signed_in=true&libraries=places&callback=initMap"
             async defer></script>
 
 
@@ -39,7 +39,8 @@
         }
 
         function initMap() {
-            initAutocomplete();
+            initAutocomplete("geocode","autocomplete");
+            initAutocomplete("address","autocomplete_street");
             initRoute();
         }
 
@@ -75,13 +76,13 @@
         }
 
         //autocomplete functions
-        function initAutocomplete(){
+        function initAutocomplete(type, className){
             // Create the autocomplete object, restricting the search to geographical
             // location types.
-            var autocompliteList  = document.getElementsByClassName("autocomplete");
+            var autocompliteList  = document.getElementsByClassName(className);
 
             var options = {
-                types: ['geocode'],
+                types: [type],
                 componentRestrictions: {country: 'ua'}
             };
 
@@ -93,6 +94,7 @@
                 // fields in the form.
                 autocomplete.addListener('place_changed', fillInAddress);
             }
+
         }
 
         function fillInAddress() {
@@ -116,46 +118,57 @@
 
             var houseNo;
             var street;
+            var district;
             var city;
             // Get each component of the address from the place details
             // and fill the corresponding field on the form.
-            for (var i = 0; i < place.address_components.length; i++) {
-                var addressType = place.address_components[i].types[0];
-                if (componentForm[addressType]) {
-                    if(addressType=="street_number"){
-                        var houseNo = place.address_components[i][componentForm[addressType]];
-                    }
-                    if(addressType=="route"){
-                        street = place.address_components[i][componentForm[addressType]];
-                    }
-                    if(addressType=="locality"){
-                        city = place.address_components[i][componentForm[addressType]];
-                        document.getElementById("city"+tagIdSuffix).value =city;
-                    }
+           if(place.address_components!=undefined) {
+               for (var i = 0; i < place.address_components.length; i++) {
+                   var addressType = place.address_components[i].types[0];
+                   if (componentForm[addressType]) {
+                       if (addressType == "street_number") {
+                           var houseNo = place.address_components[i][componentForm[addressType]];
+                       }
+                       if (addressType == "route") {
+                           street = place.address_components[i][componentForm[addressType]];
+                       }
+                       if (addressType == "locality") {
+                           city = place.address_components[i][componentForm[addressType]];
+                           document.getElementById("city" + tagIdSuffix).value = city;
+                       }
 
-                }
-            }
-            if (houseNo==undefined){
-                document.getElementById("house"+tagIdSuffix).style.display="block";
-            }else{
-                document.getElementById("house"+tagIdSuffix).value = houseNo;
-            }
-            if (street==undefined){
-                document.getElementById("street"+tagIdSuffix).style.display="block";
-                document.getElementById("street_input"+tagIdSuffix).style.display="block";
-                document.getElementById("street_input"+tagIdSuffix).style.position="absolute"
-                document.getElementById("street_input"+tagIdSuffix).style.left= document.getElementById("street"+tagIdSuffix).style.left;
-                document.getElementById("street_input"+tagIdSuffix).style.top= document.getElementById("street"+tagIdSuffix).style.top;
+                   }
+               }
 
-                document.getElementById("street"+tagIdSuffix).value = '';
-                document.getElementById("street_input"+tagIdSuffix).value = '';
-                document.getElementById("street_input"+tagIdSuffix).style.display = "none";
-            }else{
-                document.getElementById("street"+tagIdSuffix).value =street;
-                document.getElementById("street_input"+tagIdSuffix).value =street;
-                document.getElementById("street_input"+tagIdSuffix).style.display="none";
+               if (houseNo == undefined) {
+                   document.getElementById("house" + tagIdSuffix).style.display = "block";
+               } else {
+                   document.getElementById("house" + tagIdSuffix).value = houseNo;
+               }
+               if (street == undefined) {
+                   document.getElementById("street" + tagIdSuffix).style.display = "block";
+                   document.getElementById("street_input" + tagIdSuffix).style.display = "block";
+                   document.getElementById("street_input" + tagIdSuffix).style.position = "absolute"
+                   document.getElementById("street_input" + tagIdSuffix).style.left = document.getElementById("street" + tagIdSuffix).style.left;
+                   document.getElementById("street_input" + tagIdSuffix).style.top = document.getElementById("street" + tagIdSuffix).style.top;
 
-            }
+                   document.getElementById("street" + tagIdSuffix).value = '';
+                   document.getElementById("street_input" + tagIdSuffix).value = '';
+                   document.getElementById("street_input" + tagIdSuffix).style.display = "none";
+
+                   document.getElementById("district" + tagIdSuffix).value = "";
+               } else {
+                  // document.getElementById("street" + tagIdSuffix).value = street;
+                  // document.getElementById("street_input" + tagIdSuffix).value = street;
+                   document.getElementById("street_input" + tagIdSuffix).style.display = "none";
+
+                   document.getElementById("district" + tagIdSuffix).value = place.vicinity;
+
+               }
+           }else{
+               document.getElementById("district" + tagIdSuffix).value = "";
+           }
+
 
             checkReadyForCalc();
         }
@@ -167,9 +180,10 @@
         }
         var destination;
         var autocomplete1;
-        var autocomplete2;
-        var autocomplete3;
+          var autocomplete2;
+         var autocomplete3;
         var autocomplete4;
+
 
         function calcRoute() {
             var directionsService = new google.maps.DirectionsService;
@@ -199,11 +213,11 @@
         function directionsDisplay(directionsResult){
             var distance=0;
             var directionsRoutes = directionsResult.routes;
-            var geocoded_waypoints = directionsResult.geocoded_waypoints;
+//            var geocoded_waypoints = directionsResult.geocoded_waypoints;
 
-            for(var i=0; i<geocoded_waypoints.length;i++){
-                console.info(geocoded_waypoints[i].place_id);
-            }
+//            for(var i=0; i<geocoded_waypoints.length;i++){
+//                console.info(geocoded_waypoints[i].place_id);
+//            }
 
             for(var i = 0; i<directionsRoutes.length; i++){
                 for(var k =0; k<directionsRoutes[i].legs.length; k++){
@@ -495,24 +509,28 @@
             var data = {};
             data["autocomplete1"] = document.getElementById("autocomplete1").value;
             data["city1"] = document.getElementById("city1").value;
+            data["district1"]=document.getElementById("district1").value;
             data["street1"] = document.getElementById("street1").value;
             data["house1"] = document.getElementById("house1").value;
             data["note1"] = document.getElementById("note1").value;
 
             data["autocomplete2"] = document.getElementById("autocomplete2").value;
             data["city2"] = document.getElementById("city2").value;
+            data["district2"]=document.getElementById("district2").value;
             data["street2"] = document.getElementById("street2").value;
             data["house2"] = document.getElementById("house2").value;
             data["note2"] = document.getElementById("note2").value;
 
             data["autocomplete3"] = document.getElementById("autocomplete3").value;
             data["city3"] = document.getElementById("city3").value;
+            data["district3"]=document.getElementById("district3").value;
             data["street3"] = document.getElementById("street3").value;
             data["house3"] = document.getElementById("house3").value;
             data["note3"] = document.getElementById("note3").value;
 
             data["autocomplete4"] = document.getElementById("autocomplete4").value;
             data["city4"] = document.getElementById("city4").value;
+            data["district4"]=document.getElementById("district4").value;
             data["street4"] = document.getElementById("street4").value;
             data["house4"] = document.getElementById("house4").value;
             data["note4"] = document.getElementById("note4").value;
@@ -627,8 +645,9 @@
                 <input id="autocomplete1" class="form-control autocomplete" placeholder="адрес" type="text"   name ="autocomplete1"
                        onclick="setTagIdSuffix('1')" onchange="resetfields()"
                        value="${clientOrderData.get("addressFrom").getAddressFull()}" >
-                <input id="street_input1" class="form-control autocomplete"  type="text" style="display: none; z-index:-2">
-                <input id="street1" class="form-control autocomplete" placeholder="улица" type="text" style="display: none"
+                <input id="district1" class="form-control"  type="text" style="display: none">
+                <input id="street_input1" class="form-control"  type="text" style="display: none; z-index:-2">
+                <input id="street1" class="form-control autocomplete_street" placeholder="улица" type="text" style="display: none"
                        onchange="checkReadyForCalc()"
                        oninput="switchToStreetInput()" onblur="switchToStreet()"
                        value="${clientOrderData.get("addressFrom").getAddressStreet()}">
@@ -647,8 +666,9 @@
             <div  id="adr2" class="panel-body">
                 <input id="autocomplete2" class="form-control autocomplete" placeholder="адрес" type="text"  name = "autocomplete2"
                        onclick="setTagIdSuffix('2')" onchange="resetfields()">
-                <input id="street_input2" class="form-control autocomplete"  type="text" style="display: none; z-index:-2">
-                <input id="street2" class="form-control autocomplete" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()" oninput="switchToStreetInput()" onblur="switchToStreet()">
+                <input id="district2" class="form-control"  type="text" style="display: none">
+                <input id="street_input2" class="form-control"  type="text" style="display: none; z-index:-2">
+                <input id="street2" class="form-control autocomplete_street" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()" oninput="switchToStreetInput()" onblur="switchToStreet()">
                 <input id="house2" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note2" class="form-control" placeholder="примечание" type="text">
                 <input id="city2" style="display: none" value="">
@@ -656,8 +676,9 @@
             <div id="adr3" class="panel-body" style="display: none">
                 <input id="autocomplete3" class="form-control autocomplete" placeholder="адрес" type="text" name="autocomplete3"
                        onclick="setTagIdSuffix('3')" onchange="resetfields()" >
-                <input id="street_input3" class="form-control autocomplete"  type="text" style="display: none; z-index:-2">
-                <input id="street3" class="form-control autocomplete" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()" oninput="switchToStreetInput()" onblur="switchToStreet()">
+                <input id="district3" class="form-control"  type="text" style="display: none">
+                <input id="street_input3" class="form-control"  type="text" style="display: none; z-index:-2">
+                <input id="street3" class="form-control autocomplete_street" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()" oninput="switchToStreetInput()" onblur="switchToStreet()">
                 <input id="house3" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note3" class="form-control" placeholder="примечание" type="text">
                 <input id="city3" style="display: none" value="">
@@ -665,8 +686,9 @@
             <div id="adr4" class="panel-body" style="display: none">
                 <input id="autocomplete4" class="form-control autocomplete" placeholder="адрес" type="text"  name ="autocomplete4"
                        onclick="setTagIdSuffix('4')" onchange="resetfields()">
-                <input id="street_input4" class="form-control autocomplete"  type="text" style="display: none; z-index:-2">
-                <input id="street4" class="form-control autocomplete" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()" oninput="switchToStreetInput()" onblur="switchToStreet()">
+                <input id="district4" class="form-control"  type="text" style="display: none">
+                <input id="street_input4" class="form-control"  type="text" style="display: none; z-index:-2">
+                <input id="street4" class="form-control autocomplete_street" placeholder="улица" type="text" style="display: none" onchange="checkReadyForCalc()" oninput="switchToStreetInput()" onblur="switchToStreet()">
                 <input id="house4" class="form-control" placeholder="номер дома" type="text" style="display: none" onchange="checkReadyForCalc()">
                 <input id="note4" class="form-control" placeholder="примечание" type="text">
                 <input id="city4" style="display: none" value="">
