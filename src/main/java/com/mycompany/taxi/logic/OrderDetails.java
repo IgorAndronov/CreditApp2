@@ -24,6 +24,8 @@ public class OrderDetails {
 
     public  Long setOrderDetails(Map<String,String> order){
 
+        clientOrderDao.saveOrder(order);
+
         for(String k:order.keySet()){
             System.out.println(k+":"+order.get(k));
         }

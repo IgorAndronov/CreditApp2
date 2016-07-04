@@ -4,6 +4,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Timestamp;
+
 import org.hibernate.annotations.Cache;
 
 /**
@@ -13,6 +15,7 @@ import org.hibernate.annotations.Cache;
 @Cache(usage= CacheConcurrencyStrategy.READ_WRITE, region="kiev")
 @Table(name = "client_orders", schema = "taxi", catalog = "postgres")
 public class ClientOrdersEntity {
+
     private long id;
     private String region;
     private String addressCityFrom;
@@ -35,8 +38,8 @@ public class ClientOrdersEntity {
     private String addressStreetTo3;
     private String addressHomeTo3;
     private String addressNoteTo3;
-    private Date orderTime;
-    private Date arrivalTime;
+    private Timestamp orderTime;
+    private Timestamp arrivalTime;
     private Double orderInitialPrise;
     private Double distance;
     private String status;
@@ -265,21 +268,21 @@ public class ClientOrdersEntity {
 
     @Basic
     @Column(name = "order_time", nullable = true)
-    public Date getOrderTime() {
+    public Timestamp getOrderTime() {
         return orderTime;
     }
 
-    public void setOrderTime(Date orderTime) {
+    public void setOrderTime(Timestamp orderTime) {
         this.orderTime = orderTime;
     }
 
     @Basic
     @Column(name = "arrival_time", nullable = true)
-    public Date getArrivalTime() {
+    public Timestamp getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(Date arrivalTime) {
+    public void setArrivalTime(Timestamp arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 

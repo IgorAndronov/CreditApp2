@@ -158,8 +158,11 @@
 
                    document.getElementById("district" + tagIdSuffix).value = "";
                } else {
-                  // document.getElementById("street" + tagIdSuffix).value = street;
-                  // document.getElementById("street_input" + tagIdSuffix).value = street;
+                  if( document.getElementById("street" + tagIdSuffix).style.display=="none"){
+                      document.getElementById("street" + tagIdSuffix).value = street;
+                      document.getElementById("street_input" + tagIdSuffix).value = street;
+                  }
+
                    document.getElementById("street_input" + tagIdSuffix).style.display = "none";
 
                    document.getElementById("district" + tagIdSuffix).value = place.vicinity;
@@ -206,6 +209,7 @@
                     document.getElementById("makeOrder").disabled=false;
                 }else{
                     document.getElementById("cost").innerText="уточните адрес"
+                    document.getElementById("distance").innerText="";
                 }
             });
         }
@@ -230,7 +234,8 @@
             if(distance>20000){
                 rate = 6;
             }
-            document.getElementById("cost").innerText = Math.round(distance/1000*rate) + "гр.";
+            document.getElementById("cost").innerText = Math.round(distance/1000*rate);
+            document.getElementById("distance").innerText = distance/1000;
 
         }
 
@@ -276,6 +281,7 @@
 
             document.getElementById("makeOrder").disabled=true;
             document.getElementById("cost").innerHTML="";
+            document.getElementById("distance").innerText="";
 
             if(document.getElementById("autocomplete1").value!=""
                     &&(document.getElementById("street1").style.display=="none" || (document.getElementById("street1").style.display!="none" && document.getElementById("street1").value!=""))
@@ -352,6 +358,7 @@
     <script>
         function appendAddress(){
             document.getElementById("cost").innerText="";
+            document.getElementById("distance").innerText="";
             var adr3 = document.getElementById("adr3");
             var adr4 = document.getElementById("adr4");
 
@@ -367,6 +374,7 @@
 
         function deleteAddress(){
             document.getElementById("cost").innerText="";
+            document.getElementById("distance").innerText="";
 
             var adr3 = document.getElementById("adr3");
             var adr4 = document.getElementById("adr4");
@@ -542,6 +550,9 @@
             data["animals"]=document.getElementById("animals").value;
             data["nosmoking"]=document.getElementById("nosmoking").value;
             data["note_extra"]=document.getElementById("note_extra").value;
+
+            data["distance"]=document.getElementById("distance").innerText;
+            data["prise"]=document.getElementById("cost").innerText;
 
             sendAjax("order",orderSave,data);
             switchOrderScreen();
@@ -855,7 +866,8 @@
         </div>
 
         <div class="col-sm-7">
-            <label style="font-size: large;color: #428bca">Стоимость поездки:</label><label id = "cost" style="font-size: large;color: #398439; margin-left: 2pt"></label>
+            <label style="font-size: large;color: #428bca">Стоимость поездки:</label><label id = "cost" style="font-size: large;color: #398439; margin-left: 2pt"></label><label>гр.</label>
+            <label id="distance" style="display: none"></label>
         </div>
     </div>
     <div id="collapse2" class="panel-collapse collapse">

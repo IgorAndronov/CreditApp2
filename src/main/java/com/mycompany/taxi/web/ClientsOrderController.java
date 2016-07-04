@@ -64,7 +64,6 @@ public class ClientsOrderController {
             Map<String, String> map = mapper.readValue(orderData, new TypeReference<Map<String,String>>(){});
             System.out.println("!!!!!!!!"+map);
 
-            OrderDetails orderDetails = new OrderDetails();
             Long orderId = orderDetails.setOrderDetails(map);
 
             return orderId.toString();
@@ -86,7 +85,7 @@ public class ClientsOrderController {
             Map<String, String> map = mapper.readValue(orderData, new TypeReference<Map<String,String>>(){});
             System.out.println("!!!!!!!!!!"+map);
 
-            OrderDetails orderDetails = new OrderDetails();
+
             CarDetails carDetails = orderDetails.getCar(Long.getLong(map.get("orderId")));
 
             String carDetailsJson = mapper.writeValueAsString(carDetails);
