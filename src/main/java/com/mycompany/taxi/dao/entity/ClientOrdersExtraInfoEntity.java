@@ -1,9 +1,11 @@
 package com.mycompany.taxi.dao.entity;
 
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * Created by admin on 28.06.2016.
@@ -21,6 +23,10 @@ public class ClientOrdersExtraInfoEntity {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(generator = "seq_client_orders")
+    @GenericGenerator(name = "seq_client_orders",
+            strategy = "sequence",
+            parameters = {@org.hibernate.annotations.Parameter(name="sequence", value = "taxi.seq_client_orders")})
     public long getId() {
         return id;
     }

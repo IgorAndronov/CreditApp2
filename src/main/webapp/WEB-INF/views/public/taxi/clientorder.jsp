@@ -546,13 +546,16 @@
             data["arrivalDate"] = document.getElementById("datepicker").value;
             data["arrivalTime"] = document.getElementById("timepicker").value;
 
-            data["baggage"]=document.getElementById("baggage").value;
-            data["animals"]=document.getElementById("animals").value;
-            data["nosmoking"]=document.getElementById("nosmoking").value;
+            data["baggage"]=document.getElementById("baggage").checked;
+            data["animals"]=document.getElementById("animals").checked;
+            data["nosmoking"]=document.getElementById("nosmoking").checked;
             data["note_extra"]=document.getElementById("note_extra").value;
 
             data["distance"]=document.getElementById("distance").innerText;
             data["prise"]=document.getElementById("cost").innerText;
+
+            data["name"]=document.getElementById("name").value;
+            data["phoneNo"]=document.getElementById("phoneNo").value;
 
             sendAjax("order",orderSave,data);
             switchOrderScreen();

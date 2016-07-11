@@ -2,11 +2,15 @@ package com.mycompany.taxi.dao.entity;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
+import javax.persistence.*;
 
 /**
  * Created by admin on 28.06.2016.
@@ -16,7 +20,7 @@ import org.hibernate.annotations.Cache;
 @Table(name = "client_orders", schema = "taxi", catalog = "postgres")
 public class ClientOrdersEntity {
 
-    private long id;
+    private Long id;
     private String region;
     private String addressCityFrom;
     private String addressDistrictFrom;
@@ -45,14 +49,19 @@ public class ClientOrdersEntity {
     private String status;
     private ClientOrderResultEntity clientOrderResult;
     private ClientOrdersExtraInfoEntity clientOrderExtraInfo;
+    private ClientsEntity client;
 
     @Id
     @Column(name = "id", nullable = false)
-    public long getId() {
+    @GeneratedValue(generator = "seq_client_orders")
+    @GenericGenerator(name = "seq_client_orders",
+                      strategy = "sequence",
+                      parameters = {@Parameter(name="sequence", value = "taxi.seq_client_orders")})
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -316,96 +325,6 @@ public class ClientOrdersEntity {
         this.status = status;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ClientOrdersEntity that = (ClientOrdersEntity) o;
-
-        if (id != that.id) return false;
-        if (region != null ? !region.equals(that.region) : that.region != null) return false;
-        if (addressCityFrom != null ? !addressCityFrom.equals(that.addressCityFrom) : that.addressCityFrom != null)
-            return false;
-        if (addressDistrictFrom != null ? !addressDistrictFrom.equals(that.addressDistrictFrom) : that.addressDistrictFrom != null)
-            return false;
-        if (addressStreetFrom != null ? !addressStreetFrom.equals(that.addressStreetFrom) : that.addressStreetFrom != null)
-            return false;
-        if (addressHomeFrom != null ? !addressHomeFrom.equals(that.addressHomeFrom) : that.addressHomeFrom != null)
-            return false;
-        if (addressNoteFrom != null ? !addressNoteFrom.equals(that.addressNoteFrom) : that.addressNoteFrom != null)
-            return false;
-        if (addressCityTo1 != null ? !addressCityTo1.equals(that.addressCityTo1) : that.addressCityTo1 != null)
-            return false;
-        if (addressDistrictTo1 != null ? !addressDistrictTo1.equals(that.addressDistrictTo1) : that.addressDistrictTo1 != null)
-            return false;
-        if (addressStreetTo1 != null ? !addressStreetTo1.equals(that.addressStreetTo1) : that.addressStreetTo1 != null)
-            return false;
-        if (addressHomeTo1 != null ? !addressHomeTo1.equals(that.addressHomeTo1) : that.addressHomeTo1 != null)
-            return false;
-        if (addressNoteTo1 != null ? !addressNoteTo1.equals(that.addressNoteTo1) : that.addressNoteTo1 != null)
-            return false;
-        if (addressCityTo2 != null ? !addressCityTo2.equals(that.addressCityTo2) : that.addressCityTo2 != null)
-            return false;
-        if (addressDistrictTo2 != null ? !addressDistrictTo2.equals(that.addressDistrictTo2) : that.addressDistrictTo2 != null)
-            return false;
-        if (addressStreetTo2 != null ? !addressStreetTo2.equals(that.addressStreetTo2) : that.addressStreetTo2 != null)
-            return false;
-        if (addressHomeTo2 != null ? !addressHomeTo2.equals(that.addressHomeTo2) : that.addressHomeTo2 != null)
-            return false;
-        if (addressNoteTo2 != null ? !addressNoteTo2.equals(that.addressNoteTo2) : that.addressNoteTo2 != null)
-            return false;
-        if (addressCityTo3 != null ? !addressCityTo3.equals(that.addressCityTo3) : that.addressCityTo3 != null)
-            return false;
-        if (addressDistrictTo3 != null ? !addressDistrictTo3.equals(that.addressDistrictTo3) : that.addressDistrictTo3 != null)
-            return false;
-        if (addressStreetTo3 != null ? !addressStreetTo3.equals(that.addressStreetTo3) : that.addressStreetTo3 != null)
-            return false;
-        if (addressHomeTo3 != null ? !addressHomeTo3.equals(that.addressHomeTo3) : that.addressHomeTo3 != null)
-            return false;
-        if (addressNoteTo3 != null ? !addressNoteTo3.equals(that.addressNoteTo3) : that.addressNoteTo3 != null)
-            return false;
-        if (orderTime != null ? !orderTime.equals(that.orderTime) : that.orderTime != null) return false;
-        if (arrivalTime != null ? !arrivalTime.equals(that.arrivalTime) : that.arrivalTime != null) return false;
-        if (orderInitialPrise != null ? !orderInitialPrise.equals(that.orderInitialPrise) : that.orderInitialPrise != null)
-            return false;
-        if (distance != null ? !distance.equals(that.distance) : that.distance != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (region != null ? region.hashCode() : 0);
-        result = 31 * result + (addressCityFrom != null ? addressCityFrom.hashCode() : 0);
-        result = 31 * result + (addressDistrictFrom != null ? addressDistrictFrom.hashCode() : 0);
-        result = 31 * result + (addressStreetFrom != null ? addressStreetFrom.hashCode() : 0);
-        result = 31 * result + (addressHomeFrom != null ? addressHomeFrom.hashCode() : 0);
-        result = 31 * result + (addressNoteFrom != null ? addressNoteFrom.hashCode() : 0);
-        result = 31 * result + (addressCityTo1 != null ? addressCityTo1.hashCode() : 0);
-        result = 31 * result + (addressDistrictTo1 != null ? addressDistrictTo1.hashCode() : 0);
-        result = 31 * result + (addressStreetTo1 != null ? addressStreetTo1.hashCode() : 0);
-        result = 31 * result + (addressHomeTo1 != null ? addressHomeTo1.hashCode() : 0);
-        result = 31 * result + (addressNoteTo1 != null ? addressNoteTo1.hashCode() : 0);
-        result = 31 * result + (addressCityTo2 != null ? addressCityTo2.hashCode() : 0);
-        result = 31 * result + (addressDistrictTo2 != null ? addressDistrictTo2.hashCode() : 0);
-        result = 31 * result + (addressStreetTo2 != null ? addressStreetTo2.hashCode() : 0);
-        result = 31 * result + (addressHomeTo2 != null ? addressHomeTo2.hashCode() : 0);
-        result = 31 * result + (addressNoteTo2 != null ? addressNoteTo2.hashCode() : 0);
-        result = 31 * result + (addressCityTo3 != null ? addressCityTo3.hashCode() : 0);
-        result = 31 * result + (addressDistrictTo3 != null ? addressDistrictTo3.hashCode() : 0);
-        result = 31 * result + (addressStreetTo3 != null ? addressStreetTo3.hashCode() : 0);
-        result = 31 * result + (addressHomeTo3 != null ? addressHomeTo3.hashCode() : 0);
-        result = 31 * result + (addressNoteTo3 != null ? addressNoteTo3.hashCode() : 0);
-        result = 31 * result + (orderTime != null ? orderTime.hashCode() : 0);
-        result = 31 * result + (arrivalTime != null ? arrivalTime.hashCode() : 0);
-        result = 31 * result + (orderInitialPrise != null ? orderInitialPrise.hashCode() : 0);
-        result = 31 * result + (distance != null ? distance.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        return result;
-    }
 
     @OneToOne(mappedBy = "clientOrder")
     public ClientOrderResultEntity getClientOrderResult() {
@@ -423,5 +342,15 @@ public class ClientOrdersEntity {
 
     public void setClientOrderExtraInfo(ClientOrdersExtraInfoEntity clientOrderExtraInfo) {
         this.clientOrderExtraInfo = clientOrderExtraInfo;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
+    public ClientsEntity getClient() {
+        return client;
+    }
+
+    public void setClient(ClientsEntity client) {
+        this.client = client;
     }
 }

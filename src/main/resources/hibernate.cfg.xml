@@ -18,7 +18,7 @@
         <!--<property name="current_session_context_class">thread</property>-->
 
         <!-- SQL dialect -->
-        <property name="dialect">org.hibernate.dialect.ProgressDialect</property>
+        <property name="dialect">org.hibernate.dialect.PostgreSQL82Dialect</property>
 
         <!-- Enable Hibernate's automatic session context management -->
 
@@ -37,6 +37,10 @@
         <!--<property name="connection.url">jdbc:postgresql://localhost:5432/postgres</property>-->
         <property name="connection.driver_class">org.postgresql.Driver</property>
         <property name="connection.url">jdbc:postgresql://localhost:5432/postgres</property>
+
+
+        <!--Generator-->
+        <property name="hibernate.id.new_generator_mappings">true</property>
 
         <!--mapping classes-->
         <mapping class="com.mycompany.credit.dao.entity.commons.TechSpecDictionary"/>
@@ -64,6 +68,7 @@
         <mapping class="com.mycompany.taxi.dao.entity.ClientOrdersEntity"/>
         <mapping class="com.mycompany.taxi.dao.entity.ClientOrdersExtraInfoEntity"/>
         <mapping class="com.mycompany.taxi.dao.entity.ClientOrderResultEntity"/>
+        <mapping class="com.mycompany.taxi.dao.entity.ClientsEntity"/>
 
 
     </session-factory>
