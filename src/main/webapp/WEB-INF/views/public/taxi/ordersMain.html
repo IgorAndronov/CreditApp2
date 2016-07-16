@@ -69,6 +69,45 @@
             }
         }
 
+        function appendAddress(section){
+
+            var addr2 = document.getElementById("addr2"+section);
+            var addr3 = document.getElementById("addr3"+section);
+
+            if (addr2.style.display=="none"){
+                addr2.style.display="block";
+                document.getElementById("BtnDelAddr"+section).style.visibility="visible";
+            }else if (addr3.style.display=="none"){
+                addr3.style.display="block";
+                document.getElementById("BtnDelAddr").style.visibility="visible";
+            }
+            checkReadyForCalc();
+        }
+
+        function deleteAddress(){
+
+            var adr3 = document.getElementById("adr3");
+            var adr4 = document.getElementById("adr4");
+
+            if (adr4.style.display!="none"){
+                adr4.style.display="none";
+                document.getElementById("autocomplete4").value="";
+                document.getElementById("street4").value="";
+                document.getElementById("house4").value="";
+                document.getElementById("street4").style.display="none";
+                document.getElementById("house4").style.display="none";
+            }else if (adr3.style.display!="none"){
+                adr3.style.display="none";
+                document.getElementById("autocomplete3").value="";
+                document.getElementById("street3").value="";
+                document.getElementById("house3").value="";
+                document.getElementById("street3").style.display="none";
+                document.getElementById("house3").style.display="none";
+                document.getElementById("BtnDelAddr").style.visibility="hidden";
+            }
+            checkReadyForCalc();
+        }
+
     </script>
 </head>
 <body>
@@ -145,14 +184,41 @@
                     <select  class="form-control">
                         <option>Киев</option>
                     </select>
-                    <select  class="form-control">
-                        <option>Все раены</option>
-                        <option>Деснянский</option>
-                    </select>
-                    <select  class="form-control">
-                        <option>Все улицы</option>
-                        <option>бульвар Лепсе</option>
-                    </select>
+                    <div id="addr1_from">
+                        <select  class="form-control">
+                            <option>Все раены</option>
+                            <option>Деснянский</option>
+                        </select>
+                        <select  class="form-control">
+                            <option>Все улицы</option>
+                            <option>бульвар Лепсе</option>
+                        </select>
+                    </div>
+                    <div id="addr2_from" style="display: none">
+                        <select  class="form-control">
+                            <option>Все раены</option>
+                            <option>Деснянский</option>
+                        </select>
+                        <select  class="form-control">
+                            <option>Все улицы</option>
+                            <option>бульвар Лепсе</option>
+                        </select>
+                    </div>
+                    <div id="addr3_from" style="display: none">
+                        <select  class="form-control">
+                            <option>Все раены</option>
+                            <option>Деснянский</option>
+                        </select>
+                        <select  class="form-control">
+                            <option>Все улицы</option>
+                            <option>бульвар Лепсе</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-left: 10pt; margin-bottom: 2pt">
+                        <button type="button" class="btn btn-success" onclick="appendAddress('_from')">+</button>
+                        <button id = "BtnDelAddr_from" type="button" class="btn btn-info" style="visibility: hidden" onclick="deleteAddress()">-</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -171,6 +237,10 @@
                         <option>Все улицы</option>
                         <option>бульвар Лепсе</option>
                     </select>
+                    <div style="margin-left: 10pt; margin-bottom: 2pt">
+                        <button type="button" class="btn btn-success" onclick="appendAddress()">+</button>
+                        <button id = "BtnDelAddrWhere" type="button" class="btn btn-info" style="visibility: hidden" onclick="deleteAddress()">-</button>
+                    </div>
                 </div>
             </div>
 
