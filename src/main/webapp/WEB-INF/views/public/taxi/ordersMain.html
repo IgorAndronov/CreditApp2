@@ -81,31 +81,25 @@
                 addr3.style.display="block";
                 document.getElementById("BtnDelAddr").style.visibility="visible";
             }
-            checkReadyForCalc();
+
         }
 
-        function deleteAddress(){
+        function deleteAddress(section){
 
-            var adr3 = document.getElementById("adr3");
-            var adr4 = document.getElementById("adr4");
+            var addr2 = document.getElementById("addr2"+section);
+            var addr3 = document.getElementById("addr3"+section);
 
-            if (adr4.style.display!="none"){
-                adr4.style.display="none";
-                document.getElementById("autocomplete4").value="";
-                document.getElementById("street4").value="";
-                document.getElementById("house4").value="";
-                document.getElementById("street4").style.display="none";
-                document.getElementById("house4").style.display="none";
-            }else if (adr3.style.display!="none"){
-                adr3.style.display="none";
-                document.getElementById("autocomplete3").value="";
-                document.getElementById("street3").value="";
-                document.getElementById("house3").value="";
-                document.getElementById("street3").style.display="none";
-                document.getElementById("house3").style.display="none";
-                document.getElementById("BtnDelAddr").style.visibility="hidden";
+            if (addr3.style.display!="none"){
+                addr3.style.display="none";
+                document.getElementById("addr3"+section+"_distr").value="";
+                document.getElementById("addr3"+section+"_street").value="";
+
+            }else if (addr2.style.display!="none"){
+                addr2.style.display="none";
+                document.getElementById("addr2"+section+"_distr").value="";
+                document.getElementById("addr2"+section+"_street").value="";
             }
-            checkReadyForCalc();
+
         }
 
     </script>
@@ -185,31 +179,31 @@
                         <option>Киев</option>
                     </select>
                     <div id="addr1_from">
-                        <select  class="form-control">
+                        <select id="addr1_from_distr" class="form-control">
                             <option>Все раены</option>
                             <option>Деснянский</option>
                         </select>
-                        <select  class="form-control">
+                        <select  id="addr1_from_street" class="form-control">
                             <option>Все улицы</option>
                             <option>бульвар Лепсе</option>
                         </select>
                     </div>
                     <div id="addr2_from" style="display: none">
-                        <select  class="form-control">
+                        <select id="addr2_from_distr" class="form-control">
                             <option>Все раены</option>
                             <option>Деснянский</option>
                         </select>
-                        <select  class="form-control">
+                        <select  id="addr2_from_street"class="form-control">
                             <option>Все улицы</option>
                             <option>бульвар Лепсе</option>
                         </select>
                     </div>
                     <div id="addr3_from" style="display: none">
-                        <select  class="form-control">
+                        <select id="addr3_from_distr" class="form-control">
                             <option>Все раены</option>
                             <option>Деснянский</option>
                         </select>
-                        <select  class="form-control">
+                        <select id="addr3_from_street" class="form-control">
                             <option>Все улицы</option>
                             <option>бульвар Лепсе</option>
                         </select>
@@ -217,7 +211,7 @@
 
                     <div style="margin-left: 10pt; margin-bottom: 2pt">
                         <button type="button" class="btn btn-success" onclick="appendAddress('_from')">+</button>
-                        <button id = "BtnDelAddr_from" type="button" class="btn btn-info" style="visibility: hidden" onclick="deleteAddress()">-</button>
+                            <button id = "BtnDelAddr_from" type="button" class="btn btn-info" style="visibility: hidden" onclick="deleteAddress('_from')">-</button>
                     </div>
                 </div>
             </div>
@@ -229,17 +223,40 @@
                     <select  class="form-control">
                         <option>Киев</option>
                     </select>
-                    <select  class="form-control">
-                        <option>Все раены</option>
-                        <option>Деснянский</option>
-                    </select>
-                    <select  class="form-control">
-                        <option>Все улицы</option>
-                        <option>бульвар Лепсе</option>
-                    </select>
+                    <div id="addr1_to">
+                        <select id="addr1_to_distr" class="form-control">
+                            <option>Все раены</option>
+                            <option>Деснянский</option>
+                        </select>
+                        <select  id="addr1_to_street" class="form-control">
+                            <option>Все улицы</option>
+                            <option>бульвар Лепсе</option>
+                        </select>
+                    </div>
+                    <div id="addr2_to" style="display: none">
+                        <select id="addr2_to_distr" class="form-control">
+                            <option>Все раены</option>
+                            <option>Деснянский</option>
+                        </select>
+                        <select  id="addr2_to_street"class="form-control">
+                            <option>Все улицы</option>
+                            <option>бульвар Лепсе</option>
+                        </select>
+                    </div>
+                    <div id="addr3_to" style="display: none">
+                        <select id="addr3_to_distr" class="form-control">
+                            <option>Все раены</option>
+                            <option>Деснянский</option>
+                        </select>
+                        <select id="addr3_to_street" class="form-control">
+                            <option>Все улицы</option>
+                            <option>бульвар Лепсе</option>
+                        </select>
+                    </div>
+
                     <div style="margin-left: 10pt; margin-bottom: 2pt">
-                        <button type="button" class="btn btn-success" onclick="appendAddress()">+</button>
-                        <button id = "BtnDelAddrWhere" type="button" class="btn btn-info" style="visibility: hidden" onclick="deleteAddress()">-</button>
+                        <button type="button" class="btn btn-success" onclick="appendAddress('_to')">+</button>
+                        <button id = "BtnDelAddr_to" type="button" class="btn btn-info" style="visibility: hidden" onclick="deleteAddress('_to')">-</button>
                     </div>
                 </div>
             </div>
