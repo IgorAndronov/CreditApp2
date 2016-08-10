@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.apache.maven.artifact.versioning.Restriction;
 import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.stat.Statistics;
@@ -145,6 +146,39 @@ public class ClientOrderDaoImpl
 
         printStats(stats,1);
         return orderDetails;
+    }
+
+    public List<String> getAllOrdersFromDistrictsForCity(String city){
+        String queryString = "select distinct address_district_from\n" +
+                "     from taxi.client_orders\n" +
+                "     where address_district_from!= address_city_from\n"+
+                "           AND address_city_from=:city\n"+
+                "     ORDER BY address_district_from asc ";
+
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(queryString);
+        query.setParameter("city",city);
+
+        List<String> result =query.list();
+
+        return result;
+
+    }
+    public List<String> getAllOrdersFromStreetsForDistrict(String city, String district){
+        String queryString = "select distinct address_street_from\n" +
+                "     from taxi.client_orders\n" +
+                "     where address_street_from is not null\n"+
+                "           AND address_city_from=:city\n"+
+                "           AND address_district_from=:district\n"+
+                "     ORDER BY address_street_from asc ";
+
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(queryString);
+        query.setParameter("district",district)
+              .setParameter("city",city);
+
+        List<String> result =query.list();
+
+        return result;
+
     }
 
     public String convertToPkey(String data ){

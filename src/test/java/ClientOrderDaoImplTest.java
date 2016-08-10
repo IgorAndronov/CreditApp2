@@ -20,4 +20,10 @@ public class ClientOrderDaoImplTest {
 
     }
 
+    @Test
+    public void getAllOrdersFromDistrictsForCityTest(){
+        String city = "Київ";
+        clientOrderDao.getAllOrdersFromDistrictsForCity(city);
+    }
+
 }

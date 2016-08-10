@@ -1,10 +1,10 @@
 package com.mycompany.taxi.logic;
 
 import com.mycompany.taxi.dao.implementation.ClientOrderDaoImpl;
+import com.mycompany.taxi.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,5 +63,53 @@ public class OrderDetails {
 
         return carDetails;
     }
+
+    public Map<String, List<String>> getDataForLov(Map<String, String> inputMap){
+        Map<String,List<String>> resultData = new HashMap<>();
+
+        for(String key:inputMap.keySet()){
+            if(key.equals("city")){
+                resultData.putAll(getAllOrdersFromDistrictsForCity(inputMap.get(key)));
+            }
+
+            if(key.startsWith("district")){
+                String s=inputMap.get(key);
+                int index = s.indexOf("//");
+                String city = s.substring(0,index);
+                String district = s.substring(index+2,s.length());
+                resultData.putAll(getAllOrdersFromStreetsForDistrict(city,district,key.replaceAll("district","")));
+            }
+        }
+
+        return resultData;
+    }
+
+    public Map<String, List<String>> getAllOrdersFromStreetsForDistrict(String city, String district, String sufix){
+        Map<String, List<String>> result = new HashMap<>();
+        if(district.equals(WebConstants.ALL_DISTRICTS_RU)
+                          ||district.equals(WebConstants.ALL_DISTRICTS_EN)
+                          ||district.equals(WebConstants.ALL_DISTRICTS_UA)){
+          return result;
+        }
+        List<String> districtsFromList = clientOrderDao.getAllOrdersFromStreetsForDistrict(city, district);
+
+        result.put("streetsFrom"+sufix, districtsFromList);
+
+        return result;
+    }
+
+    public Map<String, List<String>> getAllOrdersFromDistrictsForCity(String city){
+        Map<String, List<String>> result = new HashMap<>();
+        List<String> districtsFromList = clientOrderDao.getAllOrdersFromDistrictsForCity(city);
+
+        result.put("districtsFrom", districtsFromList);
+
+        return result;
+    }
+
+
+
+
+
 
 }
